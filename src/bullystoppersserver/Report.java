@@ -17,6 +17,7 @@ public class Report
 	
 	// basic info. (bullying-specific)
 	private boolean injuryResulted = false;
+	private boolean absenceResulted = false;
 	private String schoolAdultsContacted = "";
 	private String injuriesSustained = "";
 	private String howDidYouLearnAboutThis = "";
@@ -34,7 +35,7 @@ public class Report
 	// we need an anonymous constructor and a non-anonymous constructor.
 	
 	// constructor (for general incident)
-	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, String incidentDescription)
+	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, String incidentDescription, Date incidentDate)
 	{
 		this.school = school;
 		this.incidentType = incidentType;
@@ -44,10 +45,11 @@ public class Report
 		this.reportingPersonEmail = reportingPersonEmail;
 		this.reportingPersonPhoneNumber = reportingPersonPhoneNumber;
 		this.incidentDescription = incidentDescription;
+		this.incidentDate = incidentDate;
 	}
 	
 	// constructor (for bullying incident)
-	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, boolean injuryResulted, String schoolAdultsContacted, String injuriesSustained, String howDidYouLearnAboutThis, String bullyingReason, Date incidentDate, String targetedStudents, String bullyNames, String incidentDescription, String bullyingIncidentLocation)
+	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, boolean injuryResulted, boolean absenceResulted, String schoolAdultsContacted, String injuriesSustained, String howDidYouLearnAboutThis, String bullyingReason, Date incidentDate, String targetedStudents, String bullyNames, String incidentDescription, String bullyingIncidentLocation)
 	{
 		this.school = school;
 		this.incidentType = incidentType;

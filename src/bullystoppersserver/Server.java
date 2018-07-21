@@ -229,7 +229,7 @@ class ServerThread implements Runnable
 												// " 		<p>\n" +
 												"	</div>\n" + 
 												"	<div>\n" + 
-												"		<a href=\"/report_concern.html\" title=\"Report a concern\"><font color=\"FF00CC\">[ Report a concern here... ]</font></a>\n" + 
+												"		<a href=\"/report_general_concern.html\" title=\"Report a concern\"><font color=\"FF00CC\">[ Report a concern here... ]</font></a>\n" + 
 												"	</div>\n" + 
 												"	<br><br>" +
 												"	<div>\n" + 
@@ -848,7 +848,7 @@ class ServerThread implements Runnable
 							}
 						}
 					}
-					else if (receiveMessage.contains("GET /report_concern.html"))
+					else if (receiveMessage.contains("GET /report_general_concern.html"))
 					{
 						if (receiveMessage.indexOf("Cookie: ") == -1)
 						{
@@ -961,6 +961,57 @@ class ServerThread implements Runnable
 											"  			<input type=\"text\" name=\"subject\" required><br>\n" + 
 											"  			(*) School:<br>\n" + 
 											"  			<input type=\"text\" name=\"schoolname\" required><br>\n" + 
+											"  			(*) Incident Date: <br>\n" +
+											"			<select name=\"month\">\n" + 
+											"  				<option value=\"1\">January</option>\n" + 
+											"  				<option value=\"2\">February</option>\n" + 
+											"  				<option value=\"3\">March</option>\n" + 
+											"  				<option value=\"4\">April</option>\n" + 
+											"  				<option value=\"5\">May</option>\n" + 
+											"  				<option value=\"6\">June</option>\n" + 
+											"  				<option value=\"7\">July</option>\n" + 
+											"  				<option value=\"8\">August</option>\n" + 
+											"  				<option value=\"9\">September</option>\n" + 
+											"  				<option value=\"10\">October</option>\n" + 
+											"  				<option value=\"11\">November</option>\n" + 
+											"  				<option value=\"12\">December</option>\n" + 
+											"			</select>/" + 
+											"			<select name=\"date\">\n" + 
+											"  				<option value=\"1\">1</option>\n" + 
+											"  				<option value=\"2\">2</option>\n" + 
+											"  				<option value=\"3\">3</option>\n" + 
+											"  				<option value=\"4\">4</option>\n" + 
+											"  				<option value=\"5\">5</option>\n" + 
+											"  				<option value=\"6\">6</option>\n" + 
+											"  				<option value=\"7\">7</option>\n" + 
+											"  				<option value=\"8\">8</option>\n" + 
+											"  				<option value=\"9\">9</option>\n" + 
+											"  				<option value=\"10\">10</option>\n" + 
+											"  				<option value=\"11\">11</option>\n" + 
+											"  				<option value=\"12\">12</option>\n" + 
+											"  				<option value=\"13\">13</option>\n" + 
+											"  				<option value=\"14\">14</option>\n" + 
+											"  				<option value=\"15\">15</option>\n" + 
+											"  				<option value=\"16\">16</option>\n" + 
+											"  				<option value=\"17\">17</option>\n" + 
+											"  				<option value=\"18\">18</option>\n" + 
+											"  				<option value=\"19\">19</option>\n" + 
+											"  				<option value=\"20\">20</option>\n" + 
+											"  				<option value=\"21\">21</option>\n" + 
+											"  				<option value=\"22\">22</option>\n" + 
+											"  				<option value=\"23\">23</option>\n" + 
+											"  				<option value=\"24\">24</option>\n" + 
+											"  				<option value=\"25\">25</option>\n" + 
+											"  				<option value=\"26\">26</option>\n" + 
+											"  				<option value=\"27\">27</option>\n" + 
+											"  				<option value=\"28\">28</option>\n" + 
+											"  				<option value=\"29\">29</option>\n" + 
+											"  				<option value=\"30\">30</option>\n" + 
+											"  				<option value=\"31\">31</option>\n" + 
+											"			</select>/" +
+											"			<select name=\"year\">\n" + 
+											yearSelectionText +
+											"			</select>\n<br>\n" +
 											"  			(*) Give a summary of the incident:<br>\n" + 
 											"			<textarea id=\"incidentDescription\" class=\"text\" cols=\"43\" rows =\"6\" name=\"incidentDescription\"></textarea><br>\n" +     
 											"			<center><strong>Reporting person</strong><br></center>\n" + 
@@ -1053,10 +1104,10 @@ class ServerThread implements Runnable
 									}
 									Calendar cal = Calendar.getInstance();
 									cal.set(Calendar.YEAR, Integer.parseInt(year));
-									cal.set(Calendar.MONTH, Integer.parseInt(month) + 1);
+									cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
 									cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
 									Date d8 = cal.getTime();
-									Report bullyReport = new Report(schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation);								
+									Report bullyReport = new Report(schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), absentYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation);								
 									DataStore.reportList.add(bullyReport);
 									s += "\r\n" +
 											"<!DOCTYPE HTML>\n" + 
@@ -1143,14 +1194,72 @@ class ServerThread implements Runnable
 								{
 									// serve a "something went wrong, go back here" page
 									e.printStackTrace();
+									send400(start);
+								}
+							}
+							else
+							{
+								requestUserLogin(start);
+							}
+						}
+					}
+					else if (receiveMessage.contains("GET /submit_general_concern.html"))
+					{
+						int p1 = receiveMessage.indexOf("user_authtokken=");
+						String token = "";
+						if (p1 == -1)
+						{
+							requestUserLogin(start);
+						}
+						else
+						{
+							token = receiveMessage.substring(p1 + 16, p1 + 16 + 36);
+							if (DataStore.authenticated.containsKey(token))
+							{
+								User tmpusr = DataStore.authenticated.get(token);
+								String username = tmpusr.getUsername();
+								int accountType = tmpusr.getAccountType();
+								// parse the form and return an "Incident Submitted" page regardless of account type.
+								try
+								{
+									String filteredString = receiveMessage.substring(receiveMessage.indexOf("?")+1);
+									String[] ari = filteredString.split("&");
+									String subject = URLDecoder.decode(ari[0].substring(ari[0].indexOf("=") + 1), "UTF-8");
+									String schoolname = URLDecoder.decode(ari[1].substring(ari[1].indexOf("=") + 1), "UTF-8");
+									String month = ari[2].substring(ari[2].indexOf("=") + 1);
+									String date = ari[3].substring(ari[3].indexOf("=") + 1);
+									String year = ari[4].substring(ari[4].indexOf("=") + 1);
+									String incidentDescription = URLDecoder.decode(ari[5].substring(ari[5].indexOf("=") + 1), "UTF-8");
+									String phone = URLDecoder.decode(ari[6].substring(ari[6].indexOf("=") + 1), "UTF-8");
+									String email = URLDecoder.decode(ari[7].substring(ari[7].indexOf("=") + 1), "UTF-8");
+									String name = URLDecoder.decode(ari[8].substring(ari[8].indexOf("=") + 1), "UTF-8");
+									boolean anonymous = false;
+									try
+									{
+										if (URLDecoder.decode(ari[18].substring(ari[18].indexOf("=") + 1), "UTF-8").contains("anonymous=y"))
+										{
+											anonymous = true;
+										}
+									}
+									catch (ArrayIndexOutOfBoundsException arg1)
+									{
+										anonymous = false;
+									}
+									Calendar cal = Calendar.getInstance();
+									cal.set(Calendar.YEAR, Integer.parseInt(year));
+									cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
+									cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
+									Date d8 = cal.getTime();
+									Report bullyReport = new Report(schoolname, 1, subject, anonymous, name, email, phone, incidentDescription, d8);								
+									DataStore.reportList.add(bullyReport);
 									s += "\r\n" +
 											"<!DOCTYPE HTML>\n" + 
 											"<html>\n" + 
 											"<head>\n" + 
 											"	<meta charset='utf-8'>\n" + 
-											"	<title>400: Bad Request</title> \n" + 
+											"	<title>Bullying Report Submitted</title> \n" + 
 											"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-											"	<link rel=\"top\" title=\"400 Bad Request\" href=\"/\">			\n" + 
+											"	<link rel=\"top\" title=\"Bullying Report Submitted\" href=\"/\">			\n" + 
 											"	<style type=\"text/css\">\n" + 
 											"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
 											"			font-family:verdana,sans-serif;\n" + 
@@ -1205,7 +1314,7 @@ class ServerThread implements Runnable
 											"<div id='searchbox3' class='mascotbox'>\n" + 
 											"	<center>\n" + 
 											"	<p>\n" + 
-											"	<strong>ERROR 400: Bad Request</strong><br><br>We're sorry, something went wrong and we couldn't parse your request.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
+											"	<strong>Report Submitted Successfully</strong><br><br>Your request has been submitted successfully.<br>Thank you for using BullyStoppers.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
 											"	</p>\n" + 
 											"	</center>\n" + 
 											"</div>\n" + 
@@ -1224,6 +1333,12 @@ class ServerThread implements Runnable
 											"</body>\n" + 
 											"</html>\n";
 								}
+								catch (Exception e)
+								{
+									// serve a "something went wrong, go back here" page
+									e.printStackTrace();
+									send400(start);
+								}
 							}
 							else
 							{
@@ -1233,87 +1348,7 @@ class ServerThread implements Runnable
 					}
 					else
 					{
-						// serve a 404 page.
-						s += "\r\n" +
-						"<!DOCTYPE HTML>\n" + 
-						"<html>\n" + 
-						"<head>\n" + 
-						"	<meta charset='utf-8'>\n" + 
-						"	<title>404: Not Found</title> \n" + 
-						"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-						"	<link rel=\"top\" title=\"404 Not Found\" href=\"/\">			\n" + 
-						"	<style type=\"text/css\">\n" + 
-						"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-						"			font-family:verdana,sans-serif;\n" + 
-						"			color:white;\n" + 
-						"			margin:0;\n" + 
-						"			padding:0;\n" + 
-						"			background:none;\n" + 
-						"		}\n" + 
-						"\n" + 
-						"		body {\n" + 
-						"			background-attachment:fixed;\n" + 
-						"			background-position:50% 0%;\n" + 
-						"			background-repeat:no-repeat;\n" + 
-						"			background-color:#012e57;\n" + 
-						"		}\n" + 
-						"\n" + 
-						"		div#content2 {\n" + 
-						"			text-align: center;\n" + 
-						"			position:absolute;\n" + 
-						"			top:28em;\n" + 
-						"			left:0;\n" + 
-						"			right:0;\n" + 
-						"		}\n" + 
-						"\n" + 
-						"		.mascotbox {\n" + 
-						"			background-repeat:no-repeat;\n" + 
-						"			background-attachment:fixed;\n" + 
-						"			background-position:50% 0%;\n" + 
-						"			margin-left: auto;\n" + 
-						"			margin-right: auto;\n" + 
-						"			margin-top:10px;\n" + 
-						"			margin-bottom:10px;\n" + 
-						"			padding:2px 0px;\n" + 
-						"			width:480px;\n" + 
-						"			border-radius: 5px;\n" + 
-						"			box-shadow: 0px 0px 5px #000;\n" + 
-						"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-						"		}\n" + 
-						"\n" + 
-						"		#searchbox { padding-bottom:5px; }\n" + 
-						"		#searchbox3 { font-size: 80%; }\n" + 
-						"		#searchbox4 { font-size: 60%; }\n" + 
-						"	</style>\n" + 
-						"</head>\n" + 
-						"<body>\n" + 
-						"<br>\n" + 
-						"<br>\n" + 
-						"<br>\n" + 
-						"<br>\n" + 
-						"<br>\n" + 
-						"<br>\n" + 
-						"<div id='searchbox3' class='mascotbox'>\n" + 
-						"	<center>\n" + 
-						"	<p>\n" + 
-						"	<strong>ERROR 404: Page Not Found.</strong><br><br>We're sorry, the page requested was not found on this server.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
-						"	</p>\n" + 
-						"	</center>\n" + 
-						"</div>\n" + 
-						"<br><br>" +
-						"" +
-						"\n" + 
-						"</div>\n" + 
-						"<center><br />\n" + 
-						"<font size=\"1\">" +
-						"        Page generated in " +
-						(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-						" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-						"        Server Local Time: " +
-						DataStore.refDate.toString() +
-						"<br></font></center><br><br><br><br>" +
-						"</body>\n" + 
-						"</html>\n";
+						send404(start);
 					}
 					bw.write(s);
 					bw.close();
@@ -1439,6 +1474,174 @@ class ServerThread implements Runnable
 				"        Server Local Time: " +
 				DataStore.refDate.toString() +
 				"<br></font></center>" +
+				"</body>\n" + 
+				"</html>\n";
+	}
+	
+	private void send400(double start)
+	{
+		s += "\r\n" +
+				"<!DOCTYPE HTML>\n" + 
+				"<html>\n" + 
+				"<head>\n" + 
+				"	<meta charset='utf-8'>\n" + 
+				"	<title>400: Bad Request</title> \n" + 
+				"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+				"	<link rel=\"top\" title=\"400 Bad Request\" href=\"/\">			\n" + 
+				"	<style type=\"text/css\">\n" + 
+				"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+				"			font-family:verdana,sans-serif;\n" + 
+				"			color:white;\n" + 
+				"			margin:0;\n" + 
+				"			padding:0;\n" + 
+				"			background:none;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		body {\n" + 
+				"			background-attachment:fixed;\n" + 
+				"			background-position:50% 0%;\n" + 
+				"			background-repeat:no-repeat;\n" + 
+				"			background-color:#012e57;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		div#content2 {\n" + 
+				"			text-align: center;\n" + 
+				"			position:absolute;\n" + 
+				"			top:28em;\n" + 
+				"			left:0;\n" + 
+				"			right:0;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		.mascotbox {\n" + 
+				"			background-repeat:no-repeat;\n" + 
+				"			background-attachment:fixed;\n" + 
+				"			background-position:50% 0%;\n" + 
+				"			margin-left: auto;\n" + 
+				"			margin-right: auto;\n" + 
+				"			margin-top:10px;\n" + 
+				"			margin-bottom:10px;\n" + 
+				"			padding:2px 0px;\n" + 
+				"			width:480px;\n" + 
+				"			border-radius: 5px;\n" + 
+				"			box-shadow: 0px 0px 5px #000;\n" + 
+				"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		#searchbox { padding-bottom:5px; }\n" + 
+				"		#searchbox3 { font-size: 80%; }\n" + 
+				"		#searchbox4 { font-size: 60%; }\n" + 
+				"	</style>\n" + 
+				"</head>\n" + 
+				"<body>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<div id='searchbox3' class='mascotbox'>\n" + 
+				"	<center>\n" + 
+				"	<p>\n" + 
+				"	<strong>ERROR 400: Bad Request</strong><br><br>We're sorry, something went wrong and we couldn't parse your request.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
+				"	</p>\n" + 
+				"	</center>\n" + 
+				"</div>\n" + 
+				"<br><br>" +
+				"" +
+				"\n" + 
+				"</div>\n" + 
+				"<center><br />\n" + 
+				"<font size=\"1\">" +
+				"        Page generated in " +
+				(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+				" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+				"        Server Local Time: " +
+				DataStore.refDate.toString() +
+				"<br></font></center><br><br><br><br>" +
+				"</body>\n" + 
+				"</html>\n";
+	}
+	
+	private void send404(double start)
+	{
+		s += "\r\n" +
+				"<!DOCTYPE HTML>\n" + 
+				"<html>\n" + 
+				"<head>\n" + 
+				"	<meta charset='utf-8'>\n" + 
+				"	<title>404: Not Found</title> \n" + 
+				"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+				"	<link rel=\"top\" title=\"404 Not Found\" href=\"/\">			\n" + 
+				"	<style type=\"text/css\">\n" + 
+				"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+				"			font-family:verdana,sans-serif;\n" + 
+				"			color:white;\n" + 
+				"			margin:0;\n" + 
+				"			padding:0;\n" + 
+				"			background:none;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		body {\n" + 
+				"			background-attachment:fixed;\n" + 
+				"			background-position:50% 0%;\n" + 
+				"			background-repeat:no-repeat;\n" + 
+				"			background-color:#012e57;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		div#content2 {\n" + 
+				"			text-align: center;\n" + 
+				"			position:absolute;\n" + 
+				"			top:28em;\n" + 
+				"			left:0;\n" + 
+				"			right:0;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		.mascotbox {\n" + 
+				"			background-repeat:no-repeat;\n" + 
+				"			background-attachment:fixed;\n" + 
+				"			background-position:50% 0%;\n" + 
+				"			margin-left: auto;\n" + 
+				"			margin-right: auto;\n" + 
+				"			margin-top:10px;\n" + 
+				"			margin-bottom:10px;\n" + 
+				"			padding:2px 0px;\n" + 
+				"			width:480px;\n" + 
+				"			border-radius: 5px;\n" + 
+				"			box-shadow: 0px 0px 5px #000;\n" + 
+				"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		#searchbox { padding-bottom:5px; }\n" + 
+				"		#searchbox3 { font-size: 80%; }\n" + 
+				"		#searchbox4 { font-size: 60%; }\n" + 
+				"	</style>\n" + 
+				"</head>\n" + 
+				"<body>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<br>\n" + 
+				"<div id='searchbox3' class='mascotbox'>\n" + 
+				"	<center>\n" + 
+				"	<p>\n" + 
+				"	<strong>ERROR 404: Page Not Found.</strong><br><br>We're sorry, the page requested was not found on this server.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
+				"	</p>\n" + 
+				"	</center>\n" + 
+				"</div>\n" + 
+				"<br><br>" +
+				"" +
+				"\n" + 
+				"</div>\n" + 
+				"<center><br />\n" + 
+				"<font size=\"1\">" +
+				"        Page generated in " +
+				(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+				" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+				"        Server Local Time: " +
+				DataStore.refDate.toString() +
+				"<br></font></center><br><br><br><br>" +
 				"</body>\n" + 
 				"</html>\n";
 	}
