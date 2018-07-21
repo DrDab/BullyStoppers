@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 public class Server 
@@ -1353,6 +1354,8 @@ class ServerThread implements Runnable
 												"			<textarea id=\"incidentDescription\" class=\"text\" cols=\"43\" rows =\"6\" name=\"incidentDescription\"></textarea><br>\n" +
 												"  			(*) Where did this incident happen?:<br>\n" + 
 												"  			<input type=\"text\" name=\"incidentLocation\" required><br>\n" + 
+												"  			Why did this incident happen?:<br>\n" + 
+												"  			<input type=\"text\" name=\"incidentReason\"><br>\n" + 
 												" 			<input type=\"checkbox\" name=\"anonymous\" value=\"y\"> Submit this anonymously<br>" +
 												"			<br><br><center><input type=\"submit\" value=\"Submit Report\"></center>" +
 												"		</form>" +
@@ -1647,22 +1650,191 @@ class ServerThread implements Runnable
 									String name = URLDecoder.decode(ari[14].substring(ari[14].indexOf("=") + 1), "UTF-8");
 									String incidentDescription = URLDecoder.decode(ari[15].substring(ari[15].indexOf("=") + 1), "UTF-8");
 									String incidentLocation = URLDecoder.decode(ari[16].substring(ari[16].indexOf("=") + 1), "UTF-8");
+									String incidentReason = URLDecoder.decode(ari[17].substring(ari[17].indexOf("=") + 1), "UTF-8");
 									boolean anonymous = false;
-									if (URLDecoder.decode(ari[17].substring(ari[17].indexOf("=") + 1), "UTF-8").contains("anonymous=y"))
+									try
 									{
-										anonymous = true;
+										if (URLDecoder.decode(ari[18].substring(ari[18].indexOf("=") + 1), "UTF-8").contains("anonymous=y"))
+										{
+											anonymous = true;
+										}
 									}
-									// TODO: Add code to parse incident location and anonymous
-									Chocolat.println("Subject: "+  subject);
-									Chocolat.println("School Name: " + schoolname);
-									Chocolat.println("Injury: " + injuryYN);
-									Chocolat.println("Absent: " + absentYN);
-									Chocolat.println("Adults Contacted: " + adultscontacted);
+									catch (ArrayIndexOutOfBoundsException arg1)
+									{
+										anonymous = false;
+									}
+									Calendar cal = Calendar.getInstance();
+									cal.set(Calendar.YEAR, Integer.parseInt(year));
+									cal.set(Calendar.MONTH, Integer.parseInt(month) + 1);
+									cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
+									Date d8 = cal.getTime();
+									Report bullyReport = new Report(schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation);								
+									DataStore.reportList.add(bullyReport);
+									s += "\r\n" +
+											"<!DOCTYPE HTML>\n" + 
+											"<html>\n" + 
+											"<head>\n" + 
+											"	<meta charset='utf-8'>\n" + 
+											"	<title>Bullying Report Submitted</title> \n" + 
+											"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+											"	<link rel=\"top\" title=\"Bullying Report Submitted\" href=\"/\">			\n" + 
+											"	<style type=\"text/css\">\n" + 
+											"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+											"			font-family:verdana,sans-serif;\n" + 
+											"			color:white;\n" + 
+											"			margin:0;\n" + 
+											"			padding:0;\n" + 
+											"			background:none;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		body {\n" + 
+											"			background-attachment:fixed;\n" + 
+											"			background-position:50% 0%;\n" + 
+											"			background-repeat:no-repeat;\n" + 
+											"			background-color:#012e57;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		div#content2 {\n" + 
+											"			text-align: center;\n" + 
+											"			position:absolute;\n" + 
+											"			top:28em;\n" + 
+											"			left:0;\n" + 
+											"			right:0;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		.mascotbox {\n" + 
+											"			background-repeat:no-repeat;\n" + 
+											"			background-attachment:fixed;\n" + 
+											"			background-position:50% 0%;\n" + 
+											"			margin-left: auto;\n" + 
+											"			margin-right: auto;\n" + 
+											"			margin-top:10px;\n" + 
+											"			margin-bottom:10px;\n" + 
+											"			padding:2px 0px;\n" + 
+											"			width:480px;\n" + 
+											"			border-radius: 5px;\n" + 
+											"			box-shadow: 0px 0px 5px #000;\n" + 
+											"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		#searchbox { padding-bottom:5px; }\n" + 
+											"		#searchbox3 { font-size: 80%; }\n" + 
+											"		#searchbox4 { font-size: 60%; }\n" + 
+											"	</style>\n" + 
+											"</head>\n" + 
+											"<body>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<div id='searchbox3' class='mascotbox'>\n" + 
+											"	<center>\n" + 
+											"	<p>\n" + 
+											"	<strong>Report Submitted Successfully</strong><br><br>Your request has been submitted successfully.<br>Thank you for using BullyStoppers.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
+											"	</p>\n" + 
+											"	</center>\n" + 
+											"</div>\n" + 
+											"<br><br>" +
+											"" +
+											"\n" + 
+											"</div>\n" + 
+											"<center><br />\n" + 
+											"<font size=\"1\">" +
+											"        Page generated in " +
+											(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+											" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+											"        Server Local Time: " +
+											DataStore.refDate.toString() +
+											"<br></font></center><br><br><br><br>" +
+											"</body>\n" + 
+											"</html>\n";
 								}
 								catch (Exception e)
 								{
 									// serve a "something went wrong, go back here" page
-									Chocolat.println(e.toString());
+									e.printStackTrace();
+									s += "\r\n" +
+											"<!DOCTYPE HTML>\n" + 
+											"<html>\n" + 
+											"<head>\n" + 
+											"	<meta charset='utf-8'>\n" + 
+											"	<title>400: Bad Request</title> \n" + 
+											"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+											"	<link rel=\"top\" title=\"400 Bad Request\" href=\"/\">			\n" + 
+											"	<style type=\"text/css\">\n" + 
+											"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+											"			font-family:verdana,sans-serif;\n" + 
+											"			color:white;\n" + 
+											"			margin:0;\n" + 
+											"			padding:0;\n" + 
+											"			background:none;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		body {\n" + 
+											"			background-attachment:fixed;\n" + 
+											"			background-position:50% 0%;\n" + 
+											"			background-repeat:no-repeat;\n" + 
+											"			background-color:#012e57;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		div#content2 {\n" + 
+											"			text-align: center;\n" + 
+											"			position:absolute;\n" + 
+											"			top:28em;\n" + 
+											"			left:0;\n" + 
+											"			right:0;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		.mascotbox {\n" + 
+											"			background-repeat:no-repeat;\n" + 
+											"			background-attachment:fixed;\n" + 
+											"			background-position:50% 0%;\n" + 
+											"			margin-left: auto;\n" + 
+											"			margin-right: auto;\n" + 
+											"			margin-top:10px;\n" + 
+											"			margin-bottom:10px;\n" + 
+											"			padding:2px 0px;\n" + 
+											"			width:480px;\n" + 
+											"			border-radius: 5px;\n" + 
+											"			box-shadow: 0px 0px 5px #000;\n" + 
+											"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		#searchbox { padding-bottom:5px; }\n" + 
+											"		#searchbox3 { font-size: 80%; }\n" + 
+											"		#searchbox4 { font-size: 60%; }\n" + 
+											"	</style>\n" + 
+											"</head>\n" + 
+											"<body>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<div id='searchbox3' class='mascotbox'>\n" + 
+											"	<center>\n" + 
+											"	<p>\n" + 
+											"	<strong>ERROR 400: Bad Request</strong><br><br>We're sorry, something went wrong and we couldn't parse your request.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
+											"	</p>\n" + 
+											"	</center>\n" + 
+											"</div>\n" + 
+											"<br><br>" +
+											"" +
+											"\n" + 
+											"</div>\n" + 
+											"<center><br />\n" + 
+											"<font size=\"1\">" +
+											"        Page generated in " +
+											(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+											" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+											"        Server Local Time: " +
+											DataStore.refDate.toString() +
+											"<br></font></center><br><br><br><br>" +
+											"</body>\n" + 
+											"</html>\n";
 								}
 							}
 							else
