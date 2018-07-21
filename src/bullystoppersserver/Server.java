@@ -1352,8 +1352,9 @@ class ServerThread implements Runnable
 												"  			(*) Give a summary of the incident:<br>\n" + 
 												"			<textarea id=\"incidentDescription\" class=\"text\" cols=\"43\" rows =\"6\" name=\"incidentDescription\"></textarea><br>\n" +
 												"  			(*) Where did this incident happen?:<br>\n" + 
-												"  			<input type=\"text\" name=\"incidentLocation\" required><br>\n<br><br>" + 
-												"			<center><input type=\"submit\" value=\"Submit Report\"></center>" +
+												"  			<input type=\"text\" name=\"incidentLocation\" required><br>\n" + 
+												" 			<input type=\"checkbox\" name=\"anonymous\" value=\"y\"> Submit this anonymously<br>" +
+												"			<br><br><center><input type=\"submit\" value=\"Submit Report\"></center>" +
 												"		</form>" +
 												"	</div>" +
 												"  </div>\n" +
@@ -1503,7 +1504,279 @@ class ServerThread implements Runnable
 					}
 					else if (receiveMessage.contains("GET /submit_bullying_report.html"))
 					{
-						
+						int p1 = receiveMessage.indexOf("user_authtokken=");
+						String token = "";
+						if (p1 == -1)
+						{
+							s += "\r\n" + 
+									"<!DOCTYPE HTML>\n" + 
+									"<html>\n" + 
+									"<head>\n" + 
+									"	<meta charset='utf-8'>\n" + 
+									"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
+									"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+									"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
+									"	<style type=\"text/css\">\n" + 
+									"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+									"			font-family:verdana,sans-serif;\n" + 
+									"			color:white;\n" + 
+									"			margin:0;\n" + 
+									"			padding:0;\n" + 
+									"			background:none;\n" + 
+									"		}\n" + 
+									"\n" + 
+									"		body {\n" + 
+									"			background-attachment:fixed;\n" + 
+									"			background-position:50% 0%;\n" + 
+									"			background-repeat:no-repeat;\n" + 
+									"			background-color:#012e57;\n" + 
+									"		}\n" + 
+									"\n" + 
+									"		div#content2 {\n" + 
+									"			text-align: center;\n" + 
+									"			position:absolute;\n" + 
+									"			top:28em;\n" + 
+									"			left:0;\n" + 
+									"			right:0;\n" + 
+									"		}\n" + 
+									"\n" + 
+									"    	.center-td {\n" + 
+									"        	text-align: center;\n" + 
+									"    	}\n" +
+									"\n" +
+									"		.mascotbox {\n" + 
+									"			background-repeat:no-repeat;\n" + 
+									"			background-attachment:fixed;\n" + 
+									"			background-position:50% 0%;\n" + 
+									"			margin-left: auto;\n" + 
+									"			margin-right: auto;\n" + 
+									"			margin-top:10px;\n" + 
+									"			margin-bottom:10px;\n" + 
+									"			padding:2px 0px;\n" + 
+									"			width:480px;\n" + 
+									"			border-radius: 5px;\n" + 
+									"			box-shadow: 0px 0px 5px #000;\n" + 
+									"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+									"		}\n" + 
+									"\n" + 
+									"		#searchbox { padding-bottom:5px; }\n" + 
+									"		#searchbox3 { font-size: 80%; }\n" + 
+									"		#searchbox4 { font-size: 60%; }\n" + 
+									"	</style>\n" + 
+									"</head>\n" + 
+									"<body>\n" + 
+									"	<div id=\"notices\">\n" + 
+									"		\n" + 
+									"			<div id=\"notice\" style=\"display:none;\">\n" + 
+									"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
+									"				<p></p>\n" + 
+									"			</div>\n" + 
+									"		\n" + 
+									"\n" + 
+									"		\n" + 
+									"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
+									"		\n" + 
+									"\n" + 
+									"		\n" + 
+									"			<div id=\"error\" style=\"display:none;\">\n" + 
+									"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
+									"				<p></p>\n" + 
+									"			</div>\n" + 
+									"		\n" + 
+									"	</div>\n" +
+									"<br><br><br><br>\n" +
+									"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
+									"<br>\n" +
+									"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
+									"		<h2>Login</h2>\n" + 
+									"<div class='section' style=\"width:500px;\">\n" + 
+									"\n" + 
+									"			<form action=\"/login\" method=\"get\">\n" + 
+									"			<center><table>\n" + 
+									"				<tr>\n" + 
+									"					<td><label for=\"user_name\">Username</label></td>\n" + 
+									"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
+									"				</tr>\n" + 
+									"				<tr>\n" + 
+									"					<td><label for=\"user_password\">Password</label></td>\n" + 
+									"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
+									"				</tr>\n" +  
+									"			</table>\n" +
+									"				<input type=\"submit\" value=\"Login\">" +
+									"			</center>\n" + 
+									"		</form>\n" + 
+									"</div></center>" +
+									"<center><br />\n" + 
+									"<font size=\"1\">" +
+									"        Page generated in " +
+									(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+									" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+									"        Server Local Time: " +
+									DataStore.refDate.toString() +
+									"<br></font></center>" +
+									"</body>\n" + 
+									"</html>\n";
+						}
+						else
+						{
+							token = receiveMessage.substring(p1 + 16, p1 + 16 + 36);
+							if (DataStore.authenticated.containsKey(token))
+							{
+								User tmpusr = DataStore.authenticated.get(token);
+								String username = tmpusr.getUsername();
+								int accountType = tmpusr.getAccountType();
+								// parse the form and return an "Incident Submitted" page regardless of account type.
+								try
+								{
+									String filteredString = receiveMessage.substring(receiveMessage.indexOf("?")+1);
+									String[] ari = filteredString.split("&");
+									String subject = URLDecoder.decode(ari[0].substring(ari[0].indexOf("=") + 1), "UTF-8");
+									String schoolname = URLDecoder.decode(ari[1].substring(ari[1].indexOf("=") + 1), "UTF-8");
+									String injuryYN = ari[2].substring(ari[2].indexOf("=") + 1);
+									String absentYN = ari[3].substring(ari[3].indexOf("=") + 1);
+									String adultscontacted = URLDecoder.decode(ari[4].substring(ari[4].indexOf("=") + 1), "UTF-8");
+									String injurydescription = URLDecoder.decode(ari[5].substring(ari[5].indexOf("=") + 1), "UTF-8");
+									String learnmethoddescription = URLDecoder.decode(ari[6].substring(ari[6].indexOf("=") + 1), "UTF-8");
+									String month = ari[7].substring(ari[7].indexOf("=") + 1);
+									String date = ari[8].substring(ari[8].indexOf("=") + 1);
+									String year = ari[9].substring(ari[9].indexOf("=") + 1);
+									String bulliedstudents = URLDecoder.decode(ari[10].substring(ari[10].indexOf("=") + 1), "UTF-8");
+									String bullies = URLDecoder.decode(ari[11].substring(ari[11].indexOf("=") + 1), "UTF-8");
+									String phone = URLDecoder.decode(ari[12].substring(ari[12].indexOf("=") + 1), "UTF-8");
+									String email = URLDecoder.decode(ari[13].substring(ari[13].indexOf("=") + 1), "UTF-8");
+									String name = URLDecoder.decode(ari[14].substring(ari[14].indexOf("=") + 1), "UTF-8");
+									String incidentDescription = URLDecoder.decode(ari[15].substring(ari[15].indexOf("=") + 1), "UTF-8");
+									String incidentLocation = URLDecoder.decode(ari[16].substring(ari[16].indexOf("=") + 1), "UTF-8");
+									boolean anonymous = false;
+									if (URLDecoder.decode(ari[17].substring(ari[17].indexOf("=") + 1), "UTF-8").contains("anonymous=y"))
+									{
+										anonymous = true;
+									}
+									// TODO: Add code to parse incident location and anonymous
+									Chocolat.println("Subject: "+  subject);
+									Chocolat.println("School Name: " + schoolname);
+									Chocolat.println("Injury: " + injuryYN);
+									Chocolat.println("Absent: " + absentYN);
+									Chocolat.println("Adults Contacted: " + adultscontacted);
+								}
+								catch (Exception e)
+								{
+									// serve a "something went wrong, go back here" page
+									Chocolat.println(e.toString());
+								}
+							}
+							else
+							{
+								s += "\r\n" + 
+										"<!DOCTYPE HTML>\n" + 
+										"<html>\n" + 
+										"<head>\n" + 
+										"	<meta charset='utf-8'>\n" + 
+										"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
+										"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+										"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
+										"	<style type=\"text/css\">\n" + 
+										"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+										"			font-family:verdana,sans-serif;\n" + 
+										"			color:white;\n" + 
+										"			margin:0;\n" + 
+										"			padding:0;\n" + 
+										"			background:none;\n" + 
+										"		}\n" + 
+										"\n" + 
+										"		body {\n" + 
+										"			background-attachment:fixed;\n" + 
+										"			background-position:50% 0%;\n" + 
+										"			background-repeat:no-repeat;\n" + 
+										"			background-color:#012e57;\n" + 
+										"		}\n" + 
+										"\n" + 
+										"		div#content2 {\n" + 
+										"			text-align: center;\n" + 
+										"			position:absolute;\n" + 
+										"			top:28em;\n" + 
+										"			left:0;\n" + 
+										"			right:0;\n" + 
+										"		}\n" + 
+										"\n" + 
+										"    	.center-td {\n" + 
+										"        	text-align: center;\n" + 
+										"    	}\n" +
+										"\n" +
+										"		.mascotbox {\n" + 
+										"			background-repeat:no-repeat;\n" + 
+										"			background-attachment:fixed;\n" + 
+										"			background-position:50% 0%;\n" + 
+										"			margin-left: auto;\n" + 
+										"			margin-right: auto;\n" + 
+										"			margin-top:10px;\n" + 
+										"			margin-bottom:10px;\n" + 
+										"			padding:2px 0px;\n" + 
+										"			width:480px;\n" + 
+										"			border-radius: 5px;\n" + 
+										"			box-shadow: 0px 0px 5px #000;\n" + 
+										"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+										"		}\n" + 
+										"\n" + 
+										"		#searchbox { padding-bottom:5px; }\n" + 
+										"		#searchbox3 { font-size: 80%; }\n" + 
+										"		#searchbox4 { font-size: 60%; }\n" + 
+										"	</style>\n" + 
+										"</head>\n" + 
+										"<body>\n" + 
+										"	<div id=\"notices\">\n" + 
+										"		\n" + 
+										"			<div id=\"notice\" style=\"display:none;\">\n" + 
+										"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
+										"				<p></p>\n" + 
+										"			</div>\n" + 
+										"		\n" + 
+										"\n" + 
+										"		\n" + 
+										"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
+										"		\n" + 
+										"\n" + 
+										"		\n" + 
+										"			<div id=\"error\" style=\"display:none;\">\n" + 
+										"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
+										"				<p></p>\n" + 
+										"			</div>\n" + 
+										"		\n" + 
+										"	</div>\n" +
+										"<br><br><br><br>\n" +
+										"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
+										"<br>\n" +
+										"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
+										"		<h2>Login</h2>\n" + 
+										"<div class='section' style=\"width:500px;\">\n" + 
+										"\n" + 
+										"			<form action=\"/login\" method=\"get\">\n" + 
+										"			<center><table>\n" + 
+										"				<tr>\n" + 
+										"					<td><label for=\"user_name\">Username</label></td>\n" + 
+										"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
+										"				</tr>\n" + 
+										"				<tr>\n" + 
+										"					<td><label for=\"user_password\">Password</label></td>\n" + 
+										"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
+										"				</tr>\n" +  
+										"			</table>\n" +
+										"				<input type=\"submit\" value=\"Login\">" +
+										"			</center>\n" + 
+										"		</form>\n" + 
+										"</div></center>" +
+										"<center><br />\n" + 
+										"<font size=\"1\">" +
+										"        Page generated in " +
+										(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+										" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+										"        Server Local Time: " +
+										DataStore.refDate.toString() +
+										"<br></font></center>" +
+										"</body>\n" + 
+										"</html>\n";
+							}
+						}
 					}
 					else
 					{
