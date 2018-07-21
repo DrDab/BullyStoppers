@@ -66,6 +66,8 @@ class ServerThread implements Runnable
 		this.st = st;
 	}
 
+	private String s = "";
+	
 	@Override
 	public void run() 
 	{
@@ -77,7 +79,7 @@ class ServerThread implements Runnable
 			BufferedReader receiveRead = new BufferedReader(new InputStreamReader(istream));
 			try
 			{	
-				String s = "HTTP/1.1 200 OK\r\n";
+				s = "HTTP/1.1 200 OK\r\n";
 				s += "Content-Type: text/html\r\n";
 				if((receiveMessage = receiveRead.readLine() )!= null)
 				{
@@ -103,114 +105,7 @@ class ServerThread implements Runnable
 						if (receiveMessage.indexOf("Cookie: ") == -1)
 						{
 							// present the login page.
-							s += "\r\n" + 
-									"<!DOCTYPE HTML>\n" + 
-									"<html>\n" + 
-									"<head>\n" + 
-									"	<meta charset='utf-8'>\n" + 
-									"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
-									"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-									"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
-									"	<style type=\"text/css\">\n" + 
-									"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-									"			font-family:verdana,sans-serif;\n" + 
-									"			color:white;\n" + 
-									"			margin:0;\n" + 
-									"			padding:0;\n" + 
-									"			background:none;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		body {\n" + 
-									"			background-attachment:fixed;\n" + 
-									"			background-position:50% 0%;\n" + 
-									"			background-repeat:no-repeat;\n" + 
-									"			background-color:#012e57;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		div#content2 {\n" + 
-									"			text-align: center;\n" + 
-									"			position:absolute;\n" + 
-									"			top:28em;\n" + 
-									"			left:0;\n" + 
-									"			right:0;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"    	.center-td {\n" + 
-									"        	text-align: center;\n" + 
-									"    	}\n" +
-									"\n" +
-									"		.mascotbox {\n" + 
-									"			background-repeat:no-repeat;\n" + 
-									"			background-attachment:fixed;\n" + 
-									"			background-position:50% 0%;\n" + 
-									"			margin-left: auto;\n" + 
-									"			margin-right: auto;\n" + 
-									"			margin-top:10px;\n" + 
-									"			margin-bottom:10px;\n" + 
-									"			padding:2px 0px;\n" + 
-									"			width:480px;\n" + 
-									"			border-radius: 5px;\n" + 
-									"			box-shadow: 0px 0px 5px #000;\n" + 
-									"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		#searchbox { padding-bottom:5px; }\n" + 
-									"		#searchbox3 { font-size: 80%; }\n" + 
-									"		#searchbox4 { font-size: 60%; }\n" + 
-									"	</style>\n" + 
-									"</head>\n" + 
-									"<body>\n" + 
-									"	<div id=\"notices\">\n" + 
-									"		\n" + 
-									"			<div id=\"notice\" style=\"display:none;\">\n" + 
-									"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-									"				<p></p>\n" + 
-									"			</div>\n" + 
-									"		\n" + 
-									"\n" + 
-									"		\n" + 
-									"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
-									"		\n" + 
-									"\n" + 
-									"		\n" + 
-									"			<div id=\"error\" style=\"display:none;\">\n" + 
-									"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-									"				<p></p>\n" + 
-									"			</div>\n" + 
-									"		\n" + 
-									"	</div>\n" +
-									"<br><br><br><br>\n" +
-									"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
-									"<br>\n" +
-									"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
-									"		<h2>Login</h2>\n" + 
-									"<div class='section' style=\"width:500px;\">\n" + 
-									"\n" + 
-									"			<form action=\"/login\" method=\"get\">\n" + 
-									"			<center><table>\n" + 
-									"				<tr>\n" + 
-									"					<td><label for=\"user_name\">Username</label></td>\n" + 
-									"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
-									"				</tr>\n" + 
-									"				<tr>\n" + 
-									"					<td><label for=\"user_password\">Password</label></td>\n" + 
-									"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
-									"				</tr>\n" +  
-									"			</table>\n" +
-									"				<input type=\"submit\" value=\"Login\">" +
-									"			</center>\n" + 
-									"		</form>\n" + 
-									"</div></center>" +
-									"<center><br />\n" + 
-									"<font size=\"1\">" +
-									"        Page generated in " +
-									(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-									" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-									"        Server Local Time: " +
-									DataStore.refDate.toString() +
-									"<br></font></center>" +
-									"</body>\n" + 
-									"</html>\n";
+							requestUserLogin(start);
 						}
 						else
 						{
@@ -218,114 +113,7 @@ class ServerThread implements Runnable
 							String token = "";
 							if (p1 == -1)
 							{
-								s += "\r\n" + 
-										"<!DOCTYPE HTML>\n" + 
-										"<html>\n" + 
-										"<head>\n" + 
-										"	<meta charset='utf-8'>\n" + 
-										"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
-										"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-										"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
-										"	<style type=\"text/css\">\n" + 
-										"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-										"			font-family:verdana,sans-serif;\n" + 
-										"			color:white;\n" + 
-										"			margin:0;\n" + 
-										"			padding:0;\n" + 
-										"			background:none;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		body {\n" + 
-										"			background-attachment:fixed;\n" + 
-										"			background-position:50% 0%;\n" + 
-										"			background-repeat:no-repeat;\n" + 
-										"			background-color:#012e57;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		div#content2 {\n" + 
-										"			text-align: center;\n" + 
-										"			position:absolute;\n" + 
-										"			top:28em;\n" + 
-										"			left:0;\n" + 
-										"			right:0;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"    	.center-td {\n" + 
-										"        	text-align: center;\n" + 
-										"    	}\n" +
-										"\n" +
-										"		.mascotbox {\n" + 
-										"			background-repeat:no-repeat;\n" + 
-										"			background-attachment:fixed;\n" + 
-										"			background-position:50% 0%;\n" + 
-										"			margin-left: auto;\n" + 
-										"			margin-right: auto;\n" + 
-										"			margin-top:10px;\n" + 
-										"			margin-bottom:10px;\n" + 
-										"			padding:2px 0px;\n" + 
-										"			width:480px;\n" + 
-										"			border-radius: 5px;\n" + 
-										"			box-shadow: 0px 0px 5px #000;\n" + 
-										"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		#searchbox { padding-bottom:5px; }\n" + 
-										"		#searchbox3 { font-size: 80%; }\n" + 
-										"		#searchbox4 { font-size: 60%; }\n" + 
-										"	</style>\n" + 
-										"</head>\n" + 
-										"<body>\n" + 
-										"	<div id=\"notices\">\n" + 
-										"		\n" + 
-										"			<div id=\"notice\" style=\"display:none;\">\n" + 
-										"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-										"				<p></p>\n" + 
-										"			</div>\n" + 
-										"		\n" + 
-										"\n" + 
-										"		\n" + 
-										"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
-										"		\n" + 
-										"\n" + 
-										"		\n" + 
-										"			<div id=\"error\" style=\"display:none;\">\n" + 
-										"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-										"				<p></p>\n" + 
-										"			</div>\n" + 
-										"		\n" + 
-										"	</div>\n" +
-										"<br><br><br><br>\n" +
-										"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
-										"<br>\n" +
-										"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
-										"		<h2>Login</h2>\n" + 
-										"<div class='section' style=\"width:500px;\">\n" + 
-										"\n" + 
-										"			<form action=\"/login\" method=\"get\">\n" + 
-										"			<center><table>\n" + 
-										"				<tr>\n" + 
-										"					<td><label for=\"user_name\">Username</label></td>\n" + 
-										"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
-										"				</tr>\n" + 
-										"				<tr>\n" + 
-										"					<td><label for=\"user_password\">Password</label></td>\n" + 
-										"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
-										"				</tr>\n" +  
-										"			</table>\n" +
-										"				<input type=\"submit\" value=\"Login\">" +
-										"			</center>\n" + 
-										"		</form>\n" + 
-										"</div></center>" +
-										"<center><br />\n" + 
-										"<font size=\"1\">" +
-										"        Page generated in " +
-										(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-										" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-										"        Server Local Time: " +
-										DataStore.refDate.toString() +
-										"<br></font></center>" +
-										"</body>\n" + 
-										"</html>\n";
+								requestUserLogin(start);
 							}
 							else
 							{
@@ -474,114 +262,7 @@ class ServerThread implements Runnable
 								}
 								else
 								{
-									s += "\r\n" + 
-											"<!DOCTYPE HTML>\n" + 
-											"<html>\n" + 
-											"<head>\n" + 
-											"	<meta charset='utf-8'>\n" + 
-											"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
-											"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-											"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
-											"	<style type=\"text/css\">\n" + 
-											"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-											"			font-family:verdana,sans-serif;\n" + 
-											"			color:white;\n" + 
-											"			margin:0;\n" + 
-											"			padding:0;\n" + 
-											"			background:none;\n" + 
-											"		}\n" + 
-											"\n" + 
-											"		body {\n" + 
-											"			background-attachment:fixed;\n" + 
-											"			background-position:50% 0%;\n" + 
-											"			background-repeat:no-repeat;\n" + 
-											"			background-color:#012e57;\n" + 
-											"		}\n" + 
-											"\n" + 
-											"		div#content2 {\n" + 
-											"			text-align: center;\n" + 
-											"			position:absolute;\n" + 
-											"			top:28em;\n" + 
-											"			left:0;\n" + 
-											"			right:0;\n" + 
-											"		}\n" + 
-											"\n" + 
-											"    	.center-td {\n" + 
-											"        	text-align: center;\n" + 
-											"    	}\n" +
-											"\n" +
-											"		.mascotbox {\n" + 
-											"			background-repeat:no-repeat;\n" + 
-											"			background-attachment:fixed;\n" + 
-											"			background-position:50% 0%;\n" + 
-											"			margin-left: auto;\n" + 
-											"			margin-right: auto;\n" + 
-											"			margin-top:10px;\n" + 
-											"			margin-bottom:10px;\n" + 
-											"			padding:2px 0px;\n" + 
-											"			width:480px;\n" + 
-											"			border-radius: 5px;\n" + 
-											"			box-shadow: 0px 0px 5px #000;\n" + 
-											"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-											"		}\n" + 
-											"\n" + 
-											"		#searchbox { padding-bottom:5px; }\n" + 
-											"		#searchbox3 { font-size: 80%; }\n" + 
-											"		#searchbox4 { font-size: 60%; }\n" + 
-											"	</style>\n" + 
-											"</head>\n" + 
-											"<body>\n" + 
-											"	<div id=\"notices\">\n" + 
-											"		\n" + 
-											"			<div id=\"notice\" style=\"display:none;\">\n" + 
-											"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-											"				<p></p>\n" + 
-											"			</div>\n" + 
-											"		\n" + 
-											"\n" + 
-											"		\n" + 
-											"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
-											"		\n" + 
-											"\n" + 
-											"		\n" + 
-											"			<div id=\"error\" style=\"display:none;\">\n" + 
-											"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-											"				<p></p>\n" + 
-											"			</div>\n" + 
-											"		\n" + 
-											"	</div>\n" +
-											"<br><br><br><br>\n" +
-											"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
-											"<br>\n" +
-											"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
-											"		<h2>Login</h2>\n" + 
-											"<div class='section' style=\"width:500px;\">\n" + 
-											"\n" + 
-											"			<form action=\"/login\" method=\"get\">\n" + 
-											"			<center><table>\n" + 
-											"				<tr>\n" + 
-											"					<td><label for=\"user_name\">Username</label></td>\n" + 
-											"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
-											"				</tr>\n" + 
-											"				<tr>\n" + 
-											"					<td><label for=\"user_password\">Password</label></td>\n" + 
-											"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
-											"				</tr>\n" +  
-											"			</table>\n" +
-											"				<input type=\"submit\" value=\"Login\">" +
-											"			</center>\n" + 
-											"		</form>\n" + 
-											"</div></center>" +
-											"<center><br />\n" + 
-											"<font size=\"1\">" +
-											"        Page generated in " +
-											(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-											" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-											"        Server Local Time: " +
-											DataStore.refDate.toString() +
-											"<br></font></center>" +
-											"</body>\n" + 
-											"</html>\n";
+									requestUserLogin(start);
 								}
 							}
 						}
@@ -947,114 +628,7 @@ class ServerThread implements Runnable
 						if (receiveMessage.indexOf("Cookie: ") == -1)
 						{
 							// present the login page.
-							s += "\r\n" + 
-									"<!DOCTYPE HTML>\n" + 
-									"<html>\n" + 
-									"<head>\n" + 
-									"	<meta charset='utf-8'>\n" + 
-									"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
-									"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-									"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
-									"	<style type=\"text/css\">\n" + 
-									"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-									"			font-family:verdana,sans-serif;\n" + 
-									"			color:white;\n" + 
-									"			margin:0;\n" + 
-									"			padding:0;\n" + 
-									"			background:none;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		body {\n" + 
-									"			background-attachment:fixed;\n" + 
-									"			background-position:50% 0%;\n" + 
-									"			background-repeat:no-repeat;\n" + 
-									"			background-color:#012e57;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		div#content2 {\n" + 
-									"			text-align: center;\n" + 
-									"			position:absolute;\n" + 
-									"			top:28em;\n" + 
-									"			left:0;\n" + 
-									"			right:0;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"    	.center-td {\n" + 
-									"        	text-align: center;\n" + 
-									"    	}\n" +
-									"\n" +
-									"		.mascotbox {\n" + 
-									"			background-repeat:no-repeat;\n" + 
-									"			background-attachment:fixed;\n" + 
-									"			background-position:50% 0%;\n" + 
-									"			margin-left: auto;\n" + 
-									"			margin-right: auto;\n" + 
-									"			margin-top:10px;\n" + 
-									"			margin-bottom:10px;\n" + 
-									"			padding:2px 0px;\n" + 
-									"			width:480px;\n" + 
-									"			border-radius: 5px;\n" + 
-									"			box-shadow: 0px 0px 5px #000;\n" + 
-									"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		#searchbox { padding-bottom:5px; }\n" + 
-									"		#searchbox3 { font-size: 80%; }\n" + 
-									"		#searchbox4 { font-size: 60%; }\n" + 
-									"	</style>\n" + 
-									"</head>\n" + 
-									"<body>\n" + 
-									"	<div id=\"notices\">\n" + 
-									"		\n" + 
-									"			<div id=\"notice\" style=\"display:none;\">\n" + 
-									"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-									"				<p></p>\n" + 
-									"			</div>\n" + 
-									"		\n" + 
-									"\n" + 
-									"		\n" + 
-									"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
-									"		\n" + 
-									"\n" + 
-									"		\n" + 
-									"			<div id=\"error\" style=\"display:none;\">\n" + 
-									"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-									"				<p></p>\n" + 
-									"			</div>\n" + 
-									"		\n" + 
-									"	</div>\n" +
-									"<br><br><br><br>\n" +
-									"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
-									"<br>\n" +
-									"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
-									"		<h2>Login</h2>\n" + 
-									"<div class='section' style=\"width:500px;\">\n" + 
-									"\n" + 
-									"			<form action=\"/login\" method=\"get\">\n" + 
-									"			<center><table>\n" + 
-									"				<tr>\n" + 
-									"					<td><label for=\"user_name\">Username</label></td>\n" + 
-									"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
-									"				</tr>\n" + 
-									"				<tr>\n" + 
-									"					<td><label for=\"user_password\">Password</label></td>\n" + 
-									"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
-									"				</tr>\n" +  
-									"			</table>\n" +
-									"				<input type=\"submit\" value=\"Login\">" +
-									"			</center>\n" + 
-									"		</form>\n" + 
-									"</div></center>" +
-									"<center><br />\n" + 
-									"<font size=\"1\">" +
-									"        Page generated in " +
-									(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-									" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-									"        Server Local Time: " +
-									DataStore.refDate.toString() +
-									"<br></font></center>" +
-									"</body>\n" + 
-									"</html>\n";
+							requestUserLogin(start);
 						}
 						else
 						{
@@ -1062,114 +636,7 @@ class ServerThread implements Runnable
 							String token = "";
 							if (p1 == -1)
 							{
-								s += "\r\n" + 
-										"<!DOCTYPE HTML>\n" + 
-										"<html>\n" + 
-										"<head>\n" + 
-										"	<meta charset='utf-8'>\n" + 
-										"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
-										"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-										"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
-										"	<style type=\"text/css\">\n" + 
-										"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-										"			font-family:verdana,sans-serif;\n" + 
-										"			color:white;\n" + 
-										"			margin:0;\n" + 
-										"			padding:0;\n" + 
-										"			background:none;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		body {\n" + 
-										"			background-attachment:fixed;\n" + 
-										"			background-position:50% 0%;\n" + 
-										"			background-repeat:no-repeat;\n" + 
-										"			background-color:#012e57;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		div#content2 {\n" + 
-										"			text-align: center;\n" + 
-										"			position:absolute;\n" + 
-										"			top:28em;\n" + 
-										"			left:0;\n" + 
-										"			right:0;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"    	.center-td {\n" + 
-										"        	text-align: center;\n" + 
-										"    	}\n" +
-										"\n" +
-										"		.mascotbox {\n" + 
-										"			background-repeat:no-repeat;\n" + 
-										"			background-attachment:fixed;\n" + 
-										"			background-position:50% 0%;\n" + 
-										"			margin-left: auto;\n" + 
-										"			margin-right: auto;\n" + 
-										"			margin-top:10px;\n" + 
-										"			margin-bottom:10px;\n" + 
-										"			padding:2px 0px;\n" + 
-										"			width:480px;\n" + 
-										"			border-radius: 5px;\n" + 
-										"			box-shadow: 0px 0px 5px #000;\n" + 
-										"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		#searchbox { padding-bottom:5px; }\n" + 
-										"		#searchbox3 { font-size: 80%; }\n" + 
-										"		#searchbox4 { font-size: 60%; }\n" + 
-										"	</style>\n" + 
-										"</head>\n" + 
-										"<body>\n" + 
-										"	<div id=\"notices\">\n" + 
-										"		\n" + 
-										"			<div id=\"notice\" style=\"display:none;\">\n" + 
-										"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-										"				<p></p>\n" + 
-										"			</div>\n" + 
-										"		\n" + 
-										"\n" + 
-										"		\n" + 
-										"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
-										"		\n" + 
-										"\n" + 
-										"		\n" + 
-										"			<div id=\"error\" style=\"display:none;\">\n" + 
-										"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-										"				<p></p>\n" + 
-										"			</div>\n" + 
-										"		\n" + 
-										"	</div>\n" +
-										"<br><br><br><br>\n" +
-										"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
-										"<br>\n" +
-										"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
-										"		<h2>Login</h2>\n" + 
-										"<div class='section' style=\"width:500px;\">\n" + 
-										"\n" + 
-										"			<form action=\"/login\" method=\"get\">\n" + 
-										"			<center><table>\n" + 
-										"				<tr>\n" + 
-										"					<td><label for=\"user_name\">Username</label></td>\n" + 
-										"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
-										"				</tr>\n" + 
-										"				<tr>\n" + 
-										"					<td><label for=\"user_password\">Password</label></td>\n" + 
-										"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
-										"				</tr>\n" +  
-										"			</table>\n" +
-										"				<input type=\"submit\" value=\"Login\">" +
-										"			</center>\n" + 
-										"		</form>\n" + 
-										"</div></center>" +
-										"<center><br />\n" + 
-										"<font size=\"1\">" +
-										"        Page generated in " +
-										(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-										" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-										"        Server Local Time: " +
-										DataStore.refDate.toString() +
-										"<br></font></center>" +
-										"</body>\n" + 
-										"</html>\n";
+								requestUserLogin(start);
 							}
 							else
 							{
@@ -1179,224 +646,20 @@ class ServerThread implements Runnable
 									User tmpusr = DataStore.authenticated.get(token);
 									String username = tmpusr.getUsername();
 									int accountType = tmpusr.getAccountType();
-									if (accountType == 0)
+									String yearSelectionText = "";
+									Calendar c = Calendar.getInstance();
+									for(int i = 2000; i < (c.get(Calendar.YEAR) + 1); i++)
 									{
-										// student page
-										//fsaiodfosaifjaosdfoijoogsajofdsafo
-										String yearSelectionText = "";
-										Calendar c = Calendar.getInstance();
-										for(int i = 2000; i < (c.get(Calendar.YEAR) + 1); i++)
-										{
-											yearSelectionText += "  				<option value=\"" + i +"\">"+ i +"</option>\n";
-										}
-										s += "\r\n" +
-												"<!DOCTYPE HTML>\n" + 
-												"<html>\n" + 
-												"<head>\n" + 
-												"	<meta charset='utf-8'>\n" + 
-												"	<title>Report an incident</title> \n" + 
-												"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-												"	<link rel=\"top\" title=\"Report an incident\" href=\"/\">			\n" + 
-												"	<style type=\"text/css\">\n" + 
-												"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-												"			font-family:verdana,sans-serif;\n" + 
-												"			color:white;\n" + 
-												"			margin:0;\n" + 
-												"			padding:0;\n" + 
-												"			background:none;\n" + 
-												"		}\n" + 
-												"\n" + 
-												"		body {\n" + 
-												"			background-attachment:fixed;\n" + 
-												"			background-position:50% 0%;\n" + 
-												"			background-repeat:no-repeat;\n" + 
-												"			background-color:#012e57;\n" + 
-												"		}\n" + 
-												"\n" + 
-												"		div#content2 {\n" + 
-												"			text-align: center;\n" + 
-												"			position:absolute;\n" + 
-												"			top:28em;\n" + 
-												"			left:0;\n" + 
-												"			right:0;\n" + 
-												"		}\n" + 
-												"\n" + 
-												"		.mascotbox {\n" + 
-												"			background-repeat:no-repeat;\n" + 
-												"			background-attachment:fixed;\n" + 
-												"			background-position:50% 0%;\n" + 
-												"			margin-left: auto;\n" + 
-												"			margin-right: auto;\n" + 
-												"			margin-top:10px;\n" + 
-												"			margin-bottom:10px;\n" + 
-												"			padding:2px 0px;\n" + 
-												"			width:480px;\n" + 
-												"			border-radius: 5px;\n" + 
-												"			box-shadow: 0px 0px 5px #000;\n" + 
-												"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-												"		}\n" + 
-												"\n" + 
-												"		#searchbox { padding-bottom:5px; }\n" + 
-												"		#searchbox3 { font-size: 80%; }\n" + 
-												"		#searchbox4 { font-size: 60%; }\n" + 
-												"		.block-menu-top td{background-color:#202224} .header_bkg{background-color:#202224}\n" + 
-												"		li.noblock{padding-right:14px}ul.dropdown li.noblock a{display:inline-block;padding:7px 0}ul.dropdown li.noblock a:first-child{padding-left:14px}ul.dropdown li.noblock a:empty{display:none}	" +
-												"	</style>\n" + 
-												"</head>\n" + 
-												"<body>\n" + 
-												"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"block-menu-top\">\n" + 
-												"    <tr>\n" + 
-												"        <td class=\"header_bkg\">\n" + 
-												"            <ul>\n" + 
-												"                <li class=\"noblock\">Welcome, " + username +" | <a href=\"/logout.html\">Log out</a></li>\n" + 
-												"            </ul>\n" + 
-												"        </td>\n" + 
-												"    </tr>\n" + 
-												"</table>\n" +
-												"<br>\n" + 
-												"<br>\n" + 
-												"<br>\n" + 
-												"<br>\n" + 
-												"<br>\n" + 
-												"<br>\n" + 
-												"<div id='searchbox3' class='mascotbox'>\n" + 
-												"	<center>\n" + 
-												"	<p>\n" + 
-												"	<strong>Report a bullying incident</strong>" +
-												"<br><br>We're here for you. Please fill out the form below and we'll be there to help you shortly.<br><br>" +
-												"	</p>\n" +
-												"	</center>\n" +
-												"	<div class=\"contentcontainer med left\" style=\"margin-left: 50px;\">"+
-												"		<form action=\"/submit_bullying_report.html\" method=\"get\">\n" + 
-												"			<center><strong>Basic Information</strong><br></center>\n" + 
-												"  			(*) Subject:<br>\n" + 
-												"  			<input type=\"text\" name=\"subject\" required><br>\n" + 
-												"  			(*) School:<br>\n" + 
-												"  			<input type=\"text\" name=\"schoolname\" required><br>\n" + 
-												"  			(*) Did an injury result from this incident?<br>\n" + 
-												"  			<input type=\"radio\" name=\"injuryYN\" value=\"y\"> Yes<br>\n" + 
-												"  			<input type=\"radio\" name=\"injuryYN\" value=\"n\" checked> No<br>\n" + 
-												"  			(*) Was the target absent from school as a result of the incident?<br>\n" + 
-												"  			<input type=\"radio\" name=\"absentYN\" value=\"y\"> Yes<br>\n" + 
-												"  			<input type=\"radio\" name=\"absentYN\" value=\"n\" checked> No<br>\n" +
-												"  			School adults you've already contacted (if any):<br>\n" + 
-												"  			<input type=\"text\" name=\"adultscontacted\"><br>\n" + 
-												"  			Describe any physical injuries:<br>\n" + 
-												"			<textarea id=\"injuryDescrip\" class=\"text\" cols=\"43\" rows =\"3\" name=\"injuryDescrip\"></textarea><br>\n" +
-												"  			How did you learn about the bullying?:<br>\n" + 
-												"			<textarea id=\"learnMethodDescrip\" class=\"text\" cols=\"43\" rows =\"3\" name=\"learnMethodDescrip\"></textarea><br>\n" +
-												"  			(*) Incident Date: <br>\n" +
-												"			<select name=\"month\">\n" + 
-												"  				<option value=\"1\">January</option>\n" + 
-												"  				<option value=\"2\">February</option>\n" + 
-												"  				<option value=\"3\">March</option>\n" + 
-												"  				<option value=\"4\">April</option>\n" + 
-												"  				<option value=\"5\">May</option>\n" + 
-												"  				<option value=\"6\">June</option>\n" + 
-												"  				<option value=\"7\">July</option>\n" + 
-												"  				<option value=\"8\">August</option>\n" + 
-												"  				<option value=\"9\">September</option>\n" + 
-												"  				<option value=\"10\">October</option>\n" + 
-												"  				<option value=\"11\">November</option>\n" + 
-												"  				<option value=\"12\">December</option>\n" + 
-												"			</select>/" + 
-												"			<select name=\"date\">\n" + 
-												"  				<option value=\"1\">1</option>\n" + 
-												"  				<option value=\"2\">2</option>\n" + 
-												"  				<option value=\"3\">3</option>\n" + 
-												"  				<option value=\"4\">4</option>\n" + 
-												"  				<option value=\"5\">5</option>\n" + 
-												"  				<option value=\"6\">6</option>\n" + 
-												"  				<option value=\"7\">7</option>\n" + 
-												"  				<option value=\"8\">8</option>\n" + 
-												"  				<option value=\"9\">9</option>\n" + 
-												"  				<option value=\"10\">10</option>\n" + 
-												"  				<option value=\"11\">11</option>\n" + 
-												"  				<option value=\"12\">12</option>\n" + 
-												"  				<option value=\"13\">13</option>\n" + 
-												"  				<option value=\"14\">14</option>\n" + 
-												"  				<option value=\"15\">15</option>\n" + 
-												"  				<option value=\"16\">16</option>\n" + 
-												"  				<option value=\"17\">17</option>\n" + 
-												"  				<option value=\"18\">18</option>\n" + 
-												"  				<option value=\"19\">19</option>\n" + 
-												"  				<option value=\"20\">20</option>\n" + 
-												"  				<option value=\"21\">21</option>\n" + 
-												"  				<option value=\"22\">22</option>\n" + 
-												"  				<option value=\"23\">23</option>\n" + 
-												"  				<option value=\"24\">24</option>\n" + 
-												"  				<option value=\"25\">25</option>\n" + 
-												"  				<option value=\"26\">26</option>\n" + 
-												"  				<option value=\"27\">27</option>\n" + 
-												"  				<option value=\"28\">28</option>\n" + 
-												"  				<option value=\"29\">29</option>\n" + 
-												"  				<option value=\"30\">30</option>\n" + 
-												"  				<option value=\"31\">31</option>\n" + 
-												"			</select>/" +
-												"			<select name=\"year\">\n" + 
-												yearSelectionText +
-												"			</select>\n<br>\n" + 
-												"  			(*) Targeted student(s):<br>\n" + 
-												"  			<input type=\"text\" name=\"bullied_students\" required><br>\n" + 
-												"  			(*) Bully/ies:<br>\n" + 
-												"  			<input type=\"text\" name=\"bullies\" required><br>\n" + 
-												"  			<br>" +
-												"			<center><strong>Reporting person</strong><br></center>\n" + 
-												"  			(*) Phone Number:<br>\n" + 
-												"  			<input type=\"text\" name=\"phone\" required><br>\n" + 
-												"  			(*) Email:<br>\n" + 
-												"  			<input type=\"text\" name=\"email\" required><br>\n" + 
-												"  			(*) Name:<br>\n" + 
-												"  			<input type=\"text\" name=\"name\" required><br>\n" + 
-												"			<br>" +
-												"			<center><strong>Incident Description</strong><br></center>\n" + 
-												"  			(*) Give a summary of the incident:<br>\n" + 
-												"			<textarea id=\"incidentDescription\" class=\"text\" cols=\"43\" rows =\"6\" name=\"incidentDescription\"></textarea><br>\n" +
-												"  			(*) Where did this incident happen?:<br>\n" + 
-												"  			<input type=\"text\" name=\"incidentLocation\" required><br>\n" + 
-												"  			Why did this incident happen?:<br>\n" + 
-												"  			<input type=\"text\" name=\"incidentReason\"><br>\n" + 
-												" 			<input type=\"checkbox\" name=\"anonymous\" value=\"y\"> Submit this anonymously<br>" +
-												"			<br><br><center><input type=\"submit\" value=\"Submit Report\"></center>" +
-												"		</form>" +
-												"	</div>" +
-												"  </div>\n" +
-												" </div>" +
-												"</div>\n" + 
-												"<br><br><br><br><center>Warning: False reports are <strong>illegal</strong> and will be <strong>aggressively investigated.</strong></center><br>" +
-												"" +
-												"\n" + 
-												"</div>\n" + 
-												"<center><br />\n" + 
-												"<font size=\"1\">" +
-												"        Page generated in " +
-												(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-												" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-												"        Server Local Time: " +
-												DataStore.refDate.toString() +
-												"<br></font></center><br><br><br><br>" +
-												"</body>\n" + 
-												"</html>\n";
+										yearSelectionText += "  				<option value=\"" + i +"\">"+ i +"</option>\n";
 									}
-									else if (accountType == 1)
-									{
-										// teacher page
-									}
-									else if (accountType == 2)
-									{
-										// admin page
-									}
-								}
-								else
-								{
-									s += "\r\n" + 
+									s += "\r\n" +
 											"<!DOCTYPE HTML>\n" + 
 											"<html>\n" + 
 											"<head>\n" + 
 											"	<meta charset='utf-8'>\n" + 
-											"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
+											"	<title>Report an incident</title> \n" + 
 											"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-											"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
+											"	<link rel=\"top\" title=\"Report an incident\" href=\"/\">			\n" + 
 											"	<style type=\"text/css\">\n" + 
 											"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
 											"			font-family:verdana,sans-serif;\n" + 
@@ -1421,10 +684,6 @@ class ServerThread implements Runnable
 											"			right:0;\n" + 
 											"		}\n" + 
 											"\n" + 
-											"    	.center-td {\n" + 
-											"        	text-align: center;\n" + 
-											"    	}\n" +
-											"\n" +
 											"		.mascotbox {\n" + 
 											"			background-repeat:no-repeat;\n" + 
 											"			background-attachment:fixed;\n" + 
@@ -1443,50 +702,134 @@ class ServerThread implements Runnable
 											"		#searchbox { padding-bottom:5px; }\n" + 
 											"		#searchbox3 { font-size: 80%; }\n" + 
 											"		#searchbox4 { font-size: 60%; }\n" + 
+											"		.block-menu-top td{background-color:#202224} .header_bkg{background-color:#202224}\n" + 
+											"		li.noblock{padding-right:14px}ul.dropdown li.noblock a{display:inline-block;padding:7px 0}ul.dropdown li.noblock a:first-child{padding-left:14px}ul.dropdown li.noblock a:empty{display:none}	" +
 											"	</style>\n" + 
 											"</head>\n" + 
 											"<body>\n" + 
-											"	<div id=\"notices\">\n" + 
-											"		\n" + 
-											"			<div id=\"notice\" style=\"display:none;\">\n" + 
-											"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-											"				<p></p>\n" + 
-											"			</div>\n" + 
-											"		\n" + 
+											"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"block-menu-top\">\n" + 
+											"    <tr>\n" + 
+											"        <td class=\"header_bkg\">\n" + 
+											"            <ul>\n" + 
+											"                <li class=\"noblock\">Welcome, " + username +" | <a href=\"/logout.html\">Log out</a></li>\n" + 
+											"            </ul>\n" + 
+											"        </td>\n" + 
+											"    </tr>\n" + 
+											"</table>\n" +
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<div id='searchbox3' class='mascotbox'>\n" + 
+											"	<center>\n" + 
+											"	<p>\n" + 
+											"	<strong>Report a bullying incident</strong>" +
+											"<br><br>We're here for you. Please fill out the form below and we'll be there to help you shortly.<br><br>" +
+											"	</p>\n" +
+											"	</center>\n" +
+											"	<div class=\"contentcontainer med left\" style=\"margin-left: 50px;\">"+
+											"		<form action=\"/submit_bullying_report.html\" method=\"get\">\n" + 
+											"			<center><strong>Basic Information</strong><br></center>\n" + 
+											"  			(*) Subject:<br>\n" + 
+											"  			<input type=\"text\" name=\"subject\" required><br>\n" + 
+											"  			(*) School:<br>\n" + 
+											"  			<input type=\"text\" name=\"schoolname\" required><br>\n" + 
+											"  			(*) Did an injury result from this incident?<br>\n" + 
+											"  			<input type=\"radio\" name=\"injuryYN\" value=\"y\"> Yes<br>\n" + 
+											"  			<input type=\"radio\" name=\"injuryYN\" value=\"n\" checked> No<br>\n" + 
+											"  			(*) Was the target absent from school as a result of the incident?<br>\n" + 
+											"  			<input type=\"radio\" name=\"absentYN\" value=\"y\"> Yes<br>\n" + 
+											"  			<input type=\"radio\" name=\"absentYN\" value=\"n\" checked> No<br>\n" +
+											"  			School adults you've already contacted (if any):<br>\n" + 
+											"  			<input type=\"text\" name=\"adultscontacted\"><br>\n" + 
+											"  			Describe any physical injuries:<br>\n" + 
+											"			<textarea id=\"injuryDescrip\" class=\"text\" cols=\"43\" rows =\"3\" name=\"injuryDescrip\"></textarea><br>\n" +
+											"  			How did you learn about the bullying?:<br>\n" + 
+											"			<textarea id=\"learnMethodDescrip\" class=\"text\" cols=\"43\" rows =\"3\" name=\"learnMethodDescrip\"></textarea><br>\n" +
+											"  			(*) Incident Date: <br>\n" +
+											"			<select name=\"month\">\n" + 
+											"  				<option value=\"1\">January</option>\n" + 
+											"  				<option value=\"2\">February</option>\n" + 
+											"  				<option value=\"3\">March</option>\n" + 
+											"  				<option value=\"4\">April</option>\n" + 
+											"  				<option value=\"5\">May</option>\n" + 
+											"  				<option value=\"6\">June</option>\n" + 
+											"  				<option value=\"7\">July</option>\n" + 
+											"  				<option value=\"8\">August</option>\n" + 
+											"  				<option value=\"9\">September</option>\n" + 
+											"  				<option value=\"10\">October</option>\n" + 
+											"  				<option value=\"11\">November</option>\n" + 
+											"  				<option value=\"12\">December</option>\n" + 
+											"			</select>/" + 
+											"			<select name=\"date\">\n" + 
+											"  				<option value=\"1\">1</option>\n" + 
+											"  				<option value=\"2\">2</option>\n" + 
+											"  				<option value=\"3\">3</option>\n" + 
+											"  				<option value=\"4\">4</option>\n" + 
+											"  				<option value=\"5\">5</option>\n" + 
+											"  				<option value=\"6\">6</option>\n" + 
+											"  				<option value=\"7\">7</option>\n" + 
+											"  				<option value=\"8\">8</option>\n" + 
+											"  				<option value=\"9\">9</option>\n" + 
+											"  				<option value=\"10\">10</option>\n" + 
+											"  				<option value=\"11\">11</option>\n" + 
+											"  				<option value=\"12\">12</option>\n" + 
+											"  				<option value=\"13\">13</option>\n" + 
+											"  				<option value=\"14\">14</option>\n" + 
+											"  				<option value=\"15\">15</option>\n" + 
+											"  				<option value=\"16\">16</option>\n" + 
+											"  				<option value=\"17\">17</option>\n" + 
+											"  				<option value=\"18\">18</option>\n" + 
+											"  				<option value=\"19\">19</option>\n" + 
+											"  				<option value=\"20\">20</option>\n" + 
+											"  				<option value=\"21\">21</option>\n" + 
+											"  				<option value=\"22\">22</option>\n" + 
+											"  				<option value=\"23\">23</option>\n" + 
+											"  				<option value=\"24\">24</option>\n" + 
+											"  				<option value=\"25\">25</option>\n" + 
+											"  				<option value=\"26\">26</option>\n" + 
+											"  				<option value=\"27\">27</option>\n" + 
+											"  				<option value=\"28\">28</option>\n" + 
+											"  				<option value=\"29\">29</option>\n" + 
+											"  				<option value=\"30\">30</option>\n" + 
+											"  				<option value=\"31\">31</option>\n" + 
+											"			</select>/" +
+											"			<select name=\"year\">\n" + 
+											yearSelectionText +
+											"			</select>\n<br>\n" + 
+											"  			(*) Targeted student(s):<br>\n" + 
+											"  			<input type=\"text\" name=\"bullied_students\" required><br>\n" + 
+											"  			(*) Bully/ies:<br>\n" + 
+											"  			<input type=\"text\" name=\"bullies\" required><br>\n" + 
+											"  			<br>" +
+											"			<center><strong>Reporting person</strong><br></center>\n" + 
+											"  			(*) Phone Number:<br>\n" + 
+											"  			<input type=\"text\" name=\"phone\" required><br>\n" + 
+											"  			(*) Email:<br>\n" + 
+											"  			<input type=\"text\" name=\"email\" required><br>\n" + 
+											"  			(*) Name:<br>\n" + 
+											"  			<input type=\"text\" name=\"name\" required><br>\n" + 
+											"			<br>" +
+											"			<center><strong>Incident Description</strong><br></center>\n" + 
+											"  			(*) Give a summary of the incident:<br>\n" + 
+											"			<textarea id=\"incidentDescription\" class=\"text\" cols=\"43\" rows =\"6\" name=\"incidentDescription\"></textarea><br>\n" +
+											"  			(*) Where did this incident happen?:<br>\n" + 
+											"  			<input type=\"text\" name=\"incidentLocation\" required><br>\n" + 
+											"  			Why did this incident happen?:<br>\n" + 
+											"  			<input type=\"text\" name=\"incidentReason\"><br>\n" + 
+											" 			<input type=\"checkbox\" name=\"anonymous\" value=\"y\"> Submit this anonymously<br>" +
+											"			<br><br><center><input type=\"submit\" value=\"Submit Report\"></center>" +
+											"		</form>" +
+											"	</div>" +
+											"  </div>\n" +
+											" </div>" +
+											"</div>\n" + 
+											"<br><br><br><br><center>Warning: False reports are <strong>illegal</strong> and will be <strong>aggressively investigated.</strong></center><br>" +
+											"" +
 											"\n" + 
-											"		\n" + 
-											"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
-											"		\n" + 
-											"\n" + 
-											"		\n" + 
-											"			<div id=\"error\" style=\"display:none;\">\n" + 
-											"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-											"				<p></p>\n" + 
-											"			</div>\n" + 
-											"		\n" + 
-											"	</div>\n" +
-											"<br><br><br><br>\n" +
-											"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
-											"<br>\n" +
-											"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
-											"		<h2>Login</h2>\n" + 
-											"<div class='section' style=\"width:500px;\">\n" + 
-											"\n" + 
-											"			<form action=\"/login\" method=\"get\">\n" + 
-											"			<center><table>\n" + 
-											"				<tr>\n" + 
-											"					<td><label for=\"user_name\">Username</label></td>\n" + 
-											"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
-											"				</tr>\n" + 
-											"				<tr>\n" + 
-											"					<td><label for=\"user_password\">Password</label></td>\n" + 
-											"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
-											"				</tr>\n" +  
-											"			</table>\n" +
-											"				<input type=\"submit\" value=\"Login\">" +
-											"			</center>\n" + 
-											"		</form>\n" + 
-											"</div></center>" +
+											"</div>\n" + 
 											"<center><br />\n" + 
 											"<font size=\"1\">" +
 											"        Page generated in " +
@@ -1494,16 +837,168 @@ class ServerThread implements Runnable
 											" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
 											"        Server Local Time: " +
 											DataStore.refDate.toString() +
-											"<br></font></center>" +
+											"<br></font></center><br><br><br><br>" +
 											"</body>\n" + 
 											"</html>\n";
+								}
+								else
+								{
+									requestUserLogin(start);
 								}
 							}
 						}
 					}
 					else if (receiveMessage.contains("GET /report_concern.html"))
 					{
-						
+						if (receiveMessage.indexOf("Cookie: ") == -1)
+						{
+							// present the login page.
+							requestUserLogin(start);
+						}
+						else
+						{
+							int p1 = receiveMessage.indexOf("user_authtokken=");
+							String token = "";
+							if (p1 == -1)
+							{
+								requestUserLogin(start);
+							}
+							else
+							{
+								token = receiveMessage.substring(p1 + 16, p1 + 16 + 36);
+								if (DataStore.authenticated.containsKey(token))
+								{
+									User tmpusr = DataStore.authenticated.get(token);
+									String username = tmpusr.getUsername();
+									int accountType = tmpusr.getAccountType();
+									String yearSelectionText = "";
+									Calendar c = Calendar.getInstance();
+									for(int i = 2000; i < (c.get(Calendar.YEAR) + 1); i++)
+									{
+										yearSelectionText += "  				<option value=\"" + i +"\">"+ i +"</option>\n";
+									}
+									s += "\r\n" +
+											"<!DOCTYPE HTML>\n" + 
+											"<html>\n" + 
+											"<head>\n" + 
+											"	<meta charset='utf-8'>\n" + 
+											"	<title>Report an incident</title> \n" + 
+											"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+											"	<link rel=\"top\" title=\"Report an incident\" href=\"/\">			\n" + 
+											"	<style type=\"text/css\">\n" + 
+											"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+											"			font-family:verdana,sans-serif;\n" + 
+											"			color:white;\n" + 
+											"			margin:0;\n" + 
+											"			padding:0;\n" + 
+											"			background:none;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		body {\n" + 
+											"			background-attachment:fixed;\n" + 
+											"			background-position:50% 0%;\n" + 
+											"			background-repeat:no-repeat;\n" + 
+											"			background-color:#012e57;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		div#content2 {\n" + 
+											"			text-align: center;\n" + 
+											"			position:absolute;\n" + 
+											"			top:28em;\n" + 
+											"			left:0;\n" + 
+											"			right:0;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		.mascotbox {\n" + 
+											"			background-repeat:no-repeat;\n" + 
+											"			background-attachment:fixed;\n" + 
+											"			background-position:50% 0%;\n" + 
+											"			margin-left: auto;\n" + 
+											"			margin-right: auto;\n" + 
+											"			margin-top:10px;\n" + 
+											"			margin-bottom:10px;\n" + 
+											"			padding:2px 0px;\n" + 
+											"			width:480px;\n" + 
+											"			border-radius: 5px;\n" + 
+											"			box-shadow: 0px 0px 5px #000;\n" + 
+											"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+											"		}\n" + 
+											"\n" + 
+											"		#searchbox { padding-bottom:5px; }\n" + 
+											"		#searchbox3 { font-size: 80%; }\n" + 
+											"		#searchbox4 { font-size: 60%; }\n" + 
+											"		.block-menu-top td{background-color:#202224} .header_bkg{background-color:#202224}\n" + 
+											"		li.noblock{padding-right:14px}ul.dropdown li.noblock a{display:inline-block;padding:7px 0}ul.dropdown li.noblock a:first-child{padding-left:14px}ul.dropdown li.noblock a:empty{display:none}	" +
+											"	</style>\n" + 
+											"</head>\n" + 
+											"<body>\n" + 
+											"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"block-menu-top\">\n" + 
+											"    <tr>\n" + 
+											"        <td class=\"header_bkg\">\n" + 
+											"            <ul>\n" + 
+											"                <li class=\"noblock\">Welcome, " + username +" | <a href=\"/logout.html\">Log out</a></li>\n" + 
+											"            </ul>\n" + 
+											"        </td>\n" + 
+											"    </tr>\n" + 
+											"</table>\n" +
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<br>\n" + 
+											"<div id='searchbox3' class='mascotbox'>\n" + 
+											"	<center>\n" + 
+											"	<p>\n" + 
+											"	<strong>Report general concern</strong>" +
+											"<br><br>Please fill in the form below and click <strong>Submit Report</strong>.<br><br>" +
+											"	</p>\n" +
+											"	</center>\n" +
+											"	<div class=\"contentcontainer med left\" style=\"margin-left: 50px;\">"+
+											"		<form action=\"/submit_general_concern.html\" method=\"get\">\n" + 
+											"			<center><strong>Basic Information</strong><br></center>\n" + 
+											"  			(*) Subject:<br>\n" + 
+											"  			<input type=\"text\" name=\"subject\" required><br>\n" + 
+											"  			(*) School:<br>\n" + 
+											"  			<input type=\"text\" name=\"schoolname\" required><br>\n" + 
+											"  			(*) Give a summary of the incident:<br>\n" + 
+											"			<textarea id=\"incidentDescription\" class=\"text\" cols=\"43\" rows =\"6\" name=\"incidentDescription\"></textarea><br>\n" +     
+											"			<center><strong>Reporting person</strong><br></center>\n" + 
+											"  			(*) Phone Number:<br>\n" + 
+											"  			<input type=\"text\" name=\"phone\" required><br>\n" + 
+											"  			(*) Email:<br>\n" + 
+											"  			<input type=\"text\" name=\"email\" required><br>\n" + 
+											"  			(*) Name:<br>\n" + 
+											"  			<input type=\"text\" name=\"name\" required><br>\n" + 
+											" 			<input type=\"checkbox\" name=\"anonymous\" value=\"y\"> Submit this anonymously<br>" +
+											"			<br>" +
+											"			<br><br><center><input type=\"submit\" value=\"Submit Report\"></center>" +
+											"		</form>" +
+											"	</div>" +
+											"  </div>\n" +
+											" </div>" +
+											"</div>\n" + 
+											"<br><br><br><br><center>Warning: False reports are <strong>illegal</strong> and will be <strong>aggressively investigated.</strong></center><br>" +
+											"" +
+											"\n" + 
+											"</div>\n" + 
+											"<center><br />\n" + 
+											"<font size=\"1\">" +
+											"        Page generated in " +
+											(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+											" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+											"        Server Local Time: " +
+											DataStore.refDate.toString() +
+											"<br></font></center><br><br><br><br>" +
+											"</body>\n" + 
+											"</html>\n";
+								}
+								else
+								{
+									requestUserLogin(start);
+								}
+							}
+						}
 					}
 					else if (receiveMessage.contains("GET /submit_bullying_report.html"))
 					{
@@ -1511,114 +1006,7 @@ class ServerThread implements Runnable
 						String token = "";
 						if (p1 == -1)
 						{
-							s += "\r\n" + 
-									"<!DOCTYPE HTML>\n" + 
-									"<html>\n" + 
-									"<head>\n" + 
-									"	<meta charset='utf-8'>\n" + 
-									"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
-									"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-									"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
-									"	<style type=\"text/css\">\n" + 
-									"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-									"			font-family:verdana,sans-serif;\n" + 
-									"			color:white;\n" + 
-									"			margin:0;\n" + 
-									"			padding:0;\n" + 
-									"			background:none;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		body {\n" + 
-									"			background-attachment:fixed;\n" + 
-									"			background-position:50% 0%;\n" + 
-									"			background-repeat:no-repeat;\n" + 
-									"			background-color:#012e57;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		div#content2 {\n" + 
-									"			text-align: center;\n" + 
-									"			position:absolute;\n" + 
-									"			top:28em;\n" + 
-									"			left:0;\n" + 
-									"			right:0;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"    	.center-td {\n" + 
-									"        	text-align: center;\n" + 
-									"    	}\n" +
-									"\n" +
-									"		.mascotbox {\n" + 
-									"			background-repeat:no-repeat;\n" + 
-									"			background-attachment:fixed;\n" + 
-									"			background-position:50% 0%;\n" + 
-									"			margin-left: auto;\n" + 
-									"			margin-right: auto;\n" + 
-									"			margin-top:10px;\n" + 
-									"			margin-bottom:10px;\n" + 
-									"			padding:2px 0px;\n" + 
-									"			width:480px;\n" + 
-									"			border-radius: 5px;\n" + 
-									"			box-shadow: 0px 0px 5px #000;\n" + 
-									"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-									"		}\n" + 
-									"\n" + 
-									"		#searchbox { padding-bottom:5px; }\n" + 
-									"		#searchbox3 { font-size: 80%; }\n" + 
-									"		#searchbox4 { font-size: 60%; }\n" + 
-									"	</style>\n" + 
-									"</head>\n" + 
-									"<body>\n" + 
-									"	<div id=\"notices\">\n" + 
-									"		\n" + 
-									"			<div id=\"notice\" style=\"display:none;\">\n" + 
-									"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-									"				<p></p>\n" + 
-									"			</div>\n" + 
-									"		\n" + 
-									"\n" + 
-									"		\n" + 
-									"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
-									"		\n" + 
-									"\n" + 
-									"		\n" + 
-									"			<div id=\"error\" style=\"display:none;\">\n" + 
-									"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-									"				<p></p>\n" + 
-									"			</div>\n" + 
-									"		\n" + 
-									"	</div>\n" +
-									"<br><br><br><br>\n" +
-									"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
-									"<br>\n" +
-									"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
-									"		<h2>Login</h2>\n" + 
-									"<div class='section' style=\"width:500px;\">\n" + 
-									"\n" + 
-									"			<form action=\"/login\" method=\"get\">\n" + 
-									"			<center><table>\n" + 
-									"				<tr>\n" + 
-									"					<td><label for=\"user_name\">Username</label></td>\n" + 
-									"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
-									"				</tr>\n" + 
-									"				<tr>\n" + 
-									"					<td><label for=\"user_password\">Password</label></td>\n" + 
-									"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
-									"				</tr>\n" +  
-									"			</table>\n" +
-									"				<input type=\"submit\" value=\"Login\">" +
-									"			</center>\n" + 
-									"		</form>\n" + 
-									"</div></center>" +
-									"<center><br />\n" + 
-									"<font size=\"1\">" +
-									"        Page generated in " +
-									(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-									" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-									"        Server Local Time: " +
-									DataStore.refDate.toString() +
-									"<br></font></center>" +
-									"</body>\n" + 
-									"</html>\n";
+							requestUserLogin(start);
 						}
 						else
 						{
@@ -1839,114 +1227,7 @@ class ServerThread implements Runnable
 							}
 							else
 							{
-								s += "\r\n" + 
-										"<!DOCTYPE HTML>\n" + 
-										"<html>\n" + 
-										"<head>\n" + 
-										"	<meta charset='utf-8'>\n" + 
-										"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
-										"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-										"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
-										"	<style type=\"text/css\">\n" + 
-										"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
-										"			font-family:verdana,sans-serif;\n" + 
-										"			color:white;\n" + 
-										"			margin:0;\n" + 
-										"			padding:0;\n" + 
-										"			background:none;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		body {\n" + 
-										"			background-attachment:fixed;\n" + 
-										"			background-position:50% 0%;\n" + 
-										"			background-repeat:no-repeat;\n" + 
-										"			background-color:#012e57;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		div#content2 {\n" + 
-										"			text-align: center;\n" + 
-										"			position:absolute;\n" + 
-										"			top:28em;\n" + 
-										"			left:0;\n" + 
-										"			right:0;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"    	.center-td {\n" + 
-										"        	text-align: center;\n" + 
-										"    	}\n" +
-										"\n" +
-										"		.mascotbox {\n" + 
-										"			background-repeat:no-repeat;\n" + 
-										"			background-attachment:fixed;\n" + 
-										"			background-position:50% 0%;\n" + 
-										"			margin-left: auto;\n" + 
-										"			margin-right: auto;\n" + 
-										"			margin-top:10px;\n" + 
-										"			margin-bottom:10px;\n" + 
-										"			padding:2px 0px;\n" + 
-										"			width:480px;\n" + 
-										"			border-radius: 5px;\n" + 
-										"			box-shadow: 0px 0px 5px #000;\n" + 
-										"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
-										"		}\n" + 
-										"\n" + 
-										"		#searchbox { padding-bottom:5px; }\n" + 
-										"		#searchbox3 { font-size: 80%; }\n" + 
-										"		#searchbox4 { font-size: 60%; }\n" + 
-										"	</style>\n" + 
-										"</head>\n" + 
-										"<body>\n" + 
-										"	<div id=\"notices\">\n" + 
-										"		\n" + 
-										"			<div id=\"notice\" style=\"display:none;\">\n" + 
-										"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-										"				<p></p>\n" + 
-										"			</div>\n" + 
-										"		\n" + 
-										"\n" + 
-										"		\n" + 
-										"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
-										"		\n" + 
-										"\n" + 
-										"		\n" + 
-										"			<div id=\"error\" style=\"display:none;\">\n" + 
-										"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
-										"				<p></p>\n" + 
-										"			</div>\n" + 
-										"		\n" + 
-										"	</div>\n" +
-										"<br><br><br><br>\n" +
-										"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
-										"<br>\n" +
-										"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
-										"		<h2>Login</h2>\n" + 
-										"<div class='section' style=\"width:500px;\">\n" + 
-										"\n" + 
-										"			<form action=\"/login\" method=\"get\">\n" + 
-										"			<center><table>\n" + 
-										"				<tr>\n" + 
-										"					<td><label for=\"user_name\">Username</label></td>\n" + 
-										"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
-										"				</tr>\n" + 
-										"				<tr>\n" + 
-										"					<td><label for=\"user_password\">Password</label></td>\n" + 
-										"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
-										"				</tr>\n" +  
-										"			</table>\n" +
-										"				<input type=\"submit\" value=\"Login\">" +
-										"			</center>\n" + 
-										"		</form>\n" + 
-										"</div></center>" +
-										"<center><br />\n" + 
-										"<font size=\"1\">" +
-										"        Page generated in " +
-										(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
-										" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
-										"        Server Local Time: " +
-										DataStore.refDate.toString() +
-										"<br></font></center>" +
-										"</body>\n" + 
-										"</html>\n";
+								requestUserLogin(start);
 							}
 						}
 					}
@@ -2049,4 +1330,117 @@ class ServerThread implements Runnable
 			Chocolat.println("[" + st.elapsedTime() + "] ServerThread failed: " + ioe);
 		}
 	}
+	
+	private void requestUserLogin(double start)
+	{
+		s +=								s += "\r\n" + 
+				"<!DOCTYPE HTML>\n" + 
+				"<html>\n" + 
+				"<head>\n" + 
+				"	<meta charset='utf-8'>\n" + 
+				"	<title>System Login -- BullyStoppers Reporting System</title> \n" + 
+				"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+				"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
+				"	<style type=\"text/css\">\n" + 
+				"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+				"			font-family:verdana,sans-serif;\n" + 
+				"			color:white;\n" + 
+				"			margin:0;\n" + 
+				"			padding:0;\n" + 
+				"			background:none;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		body {\n" + 
+				"			background-attachment:fixed;\n" + 
+				"			background-position:50% 0%;\n" + 
+				"			background-repeat:no-repeat;\n" + 
+				"			background-color:#012e57;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		div#content2 {\n" + 
+				"			text-align: center;\n" + 
+				"			position:absolute;\n" + 
+				"			top:28em;\n" + 
+				"			left:0;\n" + 
+				"			right:0;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"    	.center-td {\n" + 
+				"        	text-align: center;\n" + 
+				"    	}\n" +
+				"\n" +
+				"		.mascotbox {\n" + 
+				"			background-repeat:no-repeat;\n" + 
+				"			background-attachment:fixed;\n" + 
+				"			background-position:50% 0%;\n" + 
+				"			margin-left: auto;\n" + 
+				"			margin-right: auto;\n" + 
+				"			margin-top:10px;\n" + 
+				"			margin-bottom:10px;\n" + 
+				"			padding:2px 0px;\n" + 
+				"			width:480px;\n" + 
+				"			border-radius: 5px;\n" + 
+				"			box-shadow: 0px 0px 5px #000;\n" + 
+				"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+				"		}\n" + 
+				"\n" + 
+				"		#searchbox { padding-bottom:5px; }\n" + 
+				"		#searchbox3 { font-size: 80%; }\n" + 
+				"		#searchbox4 { font-size: 60%; }\n" + 
+				"	</style>\n" + 
+				"</head>\n" + 
+				"<body>\n" + 
+				"	<div id=\"notices\">\n" + 
+				"		\n" + 
+				"			<div id=\"notice\" style=\"display:none;\">\n" + 
+				"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
+				"				<p></p>\n" + 
+				"			</div>\n" + 
+				"		\n" + 
+				"\n" + 
+				"		\n" + 
+				"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
+				"		\n" + 
+				"\n" + 
+				"		\n" + 
+				"			<div id=\"error\" style=\"display:none;\">\n" + 
+				"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
+				"				<p></p>\n" + 
+				"			</div>\n" + 
+				"		\n" + 
+				"	</div>\n" +
+				"<br><br><br><br>\n" +
+				"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
+				"<br>\n" +
+				"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
+				"		<h2>Login</h2>\n" + 
+				"<div class='section' style=\"width:500px;\">\n" + 
+				"\n" + 
+				"			<form action=\"/login\" method=\"get\">\n" + 
+				"			<center><table>\n" + 
+				"				<tr>\n" + 
+				"					<td><label for=\"user_name\">Username</label></td>\n" + 
+				"					<td align=\"center\"><input id=\"user_name\" name=\"username\" size=\"30\" tabindex=\"1\" type=\"text\"></td>\n" + 
+				"				</tr>\n" + 
+				"				<tr>\n" + 
+				"					<td><label for=\"user_password\">Password</label></td>\n" + 
+				"					<td><input id=\"user_password\" name=\"password\" size=\"30\" tabindex=\"1\" type=\"password\"></td>\n" + 
+				"				</tr>\n" +  
+				"			</table>\n" +
+				"				<input type=\"submit\" value=\"Login\">" +
+				"			</center>\n" + 
+				"		</form>\n" + 
+				"</div></center>" +
+				"<center><br />\n" + 
+				"<font size=\"1\">" +
+				"        Page generated in " +
+				(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+				" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+				"        Server Local Time: " +
+				DataStore.refDate.toString() +
+				"<br></font></center>" +
+				"</body>\n" + 
+				"</html>\n";
+	}
+	
 }
