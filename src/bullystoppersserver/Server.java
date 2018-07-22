@@ -10,6 +10,7 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -1226,7 +1227,6 @@ class ServerThread implements Runnable
 									}
 									else
 									{
-										System.out.println(ari[18]);
 										witnesses = URLDecoder.decode(ari[18].substring(ari[18].indexOf("=") + 1, ari[18].indexOf(" HTTP/1.1")), "UTF-8");
 									}
 									Calendar cal = Calendar.getInstance();
@@ -1234,8 +1234,9 @@ class ServerThread implements Runnable
 									cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
 									cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
 									Date d8 = cal.getTime();
-									Report bullyReport = new Report(DataStore.reportList.size(), schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), absentYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation, witnesses);								
-									DataStore.reportList.add(bullyReport);
+									Report bullyReport = new Report(DataStore.incidentdb.getNextReportID(), schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), absentYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation, witnesses);	
+									DataStore.incidentdb.addReport(bullyReport);
+									// DataStore.reportList.add(bullyReport);
 									s += "\r\n" +
 											"<!DOCTYPE HTML>\n" + 
 											"<html>\n" + 
@@ -1377,8 +1378,8 @@ class ServerThread implements Runnable
 									cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
 									cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
 									Date d8 = cal.getTime();
-									Report bullyReport = new Report(DataStore.reportList.size(), schoolname, 1, subject, anonymous, name, email, phone, incidentDescription, d8);								
-									DataStore.reportList.add(bullyReport);
+									Report bullyReport = new Report(DataStore.incidentdb.getNextReportID(), schoolname, 1, subject, anonymous, name, email, phone, incidentDescription, d8);								
+									DataStore.incidentdb.addReport(bullyReport);
 									s += "\r\n" +
 											"<!DOCTYPE HTML>\n" + 
 											"<html>\n" + 
@@ -1502,9 +1503,10 @@ class ServerThread implements Runnable
 										// teacher page
 										// return this page if teacher in active directory group
 										String generatedIncidentList = "";
-										for(int i = 0; i < DataStore.reportList.size(); i++)
+										ArrayList<Report> al = DataStore.incidentdb.queryReports();
+										for(int i = 0; i < al.size(); i++)
 										{
-											Report rep = DataStore.reportList.get(i);
+											Report rep = al.get(i);
 											if(rep.isOpen())
 											{
 												Date incidentDate = rep.getIncidentDate();
@@ -1535,7 +1537,7 @@ class ServerThread implements Runnable
 													"		Incident Date: " + month + "/" + date + "/" + year + "<br>";
 												}
 												generatedIncidentList += 
-													"		<br><a href=\"/view_ticket.html?id=" + i + "\" title=\"View the ticket\"><font color=\"FF00CC\">[ View the ticket here... ]</font></a>";
+													"		<br><a href=\"/view_ticket.html?id=" + rep.getID() + "\" title=\"View the ticket\"><font color=\"FF00CC\">[ View the ticket here... ]</font></a>";
 												generatedIncidentList += 
 																"	</div>" + 
 																"</div></center>";
@@ -1685,7 +1687,7 @@ class ServerThread implements Runnable
 										{
 											String idstr = receiveMessage.substring(receiveMessage.indexOf("=") + 1, receiveMessage.indexOf("HTTP/1.1") - 1);
 											int reportID = Integer.parseInt(idstr);
-											Report rep = DataStore.reportList.get(reportID);
+											Report rep = DataStore.incidentdb.getReportById(reportID);
 											Date incidentDate = rep.getIncidentDate();
 											Calendar cal = Calendar.getInstance();
 											cal.setTime(incidentDate);
@@ -1888,8 +1890,9 @@ class ServerThread implements Runnable
 										{
 											String idstr = receiveMessage.substring(receiveMessage.indexOf("=") + 1, receiveMessage.indexOf("HTTP/1.1") - 1);
 											int reportID = Integer.parseInt(idstr);
-											Report rep = DataStore.reportList.get(reportID);
+											Report rep = DataStore.incidentdb.getReportById(reportID);
 											rep.closeReport();
+											DataStore.incidentdb.closeReport(rep);
 											s += "\r\n" +
 													"<!DOCTYPE HTML>\n" + 
 													"<html>\n" + 

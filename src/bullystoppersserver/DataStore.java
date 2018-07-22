@@ -14,23 +14,19 @@ public class DataStore
 	
 	public static HashMap<String, User> authenticated = new HashMap<String, User>();
 	
-	public static ArrayList<Report> reportList = new ArrayList<Report>();
-	
-	public static ArrayList<Report> fetchReportListFromJson(String path)
-	{
-		return null;
-	}
-	
 	public static int getIncidentsOpen()
 	{
-		int furry = 0;
-		for(Report r : reportList)
+		ArrayList<Report> tmp = incidentdb.queryReports();
+		int cnt = 0;
+		for (Report report : tmp)
 		{
-			if (r.isOpen())
+			if (report.isOpen())
 			{
-				furry++;
+				cnt++;
 			}
 		}
-		return furry;
+		return cnt;
 	}
+	
+	public static IncidentDB incidentdb;
 }

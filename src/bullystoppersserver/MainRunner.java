@@ -13,6 +13,8 @@ public class MainRunner
 	{
 		stp = new Stopwatch();
 		new Thread(new DateUpdatorThread()).start();
+		DataStore.incidentdb = new IncidentDB(stp);
+		DataStore.incidentdb.initSQL("incidents.db");
 		Server listener;
 		try
 		{
@@ -30,7 +32,6 @@ public class MainRunner
 		{
 			Chocolat.println(e.toString());
 		}
-
 	}
 	
 
