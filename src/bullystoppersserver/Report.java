@@ -50,7 +50,7 @@ public class Report
 	}
 	
 	// constructor (for bullying incident)
-	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, boolean injuryResulted, boolean absenceResulted, String schoolAdultsContacted, String injuriesSustained, String howDidYouLearnAboutThis, String bullyingReason, Date incidentDate, String targetedStudents, String bullyNames, String incidentDescription, String bullyingIncidentLocation)
+	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, boolean injuryResulted, boolean absenceResulted, String schoolAdultsContacted, String injuriesSustained, String howDidYouLearnAboutThis, String bullyingReason, Date incidentDate, String targetedStudents, String bullyNames, String incidentDescription, String bullyingIncidentLocation, String witnessNames)
 	{
 		this.school = school;
 		this.incidentType = incidentType;
@@ -69,6 +69,7 @@ public class Report
 		this.bullyNames = bullyNames;
 		this.incidentDescription = incidentDescription;
 		this.bullyIncidentLocation = bullyingIncidentLocation;
+		this.witnessNames = witnessNames;
 	}
 	
 	public String getSchool()

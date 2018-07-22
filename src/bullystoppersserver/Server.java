@@ -934,6 +934,8 @@ class ServerThread implements Runnable
 											"  			<input type=\"text\" name=\"incidentLocation\" required><br>\n" + 
 											"  			Why did this incident happen?:<br>\n" + 
 											"  			<input type=\"text\" name=\"incidentReason\"><br>\n" + 
+											"  			Any Witness(es)?:<br>\n" + 
+											"  			<input type=\"text\" name=\"witnesses\"><br>\n" + 
 											" 			<input type=\"checkbox\" name=\"anonymous\" value=\"y\"> Submit this anonymously<br>" +
 											"			<br><br><center><input type=\"submit\" value=\"Submit Report\"></center>" +
 											"		</form>" +
@@ -1204,11 +1206,12 @@ class ServerThread implements Runnable
 									String name = URLDecoder.decode(ari[14].substring(ari[14].indexOf("=") + 1), "UTF-8");
 									String incidentDescription = URLDecoder.decode(ari[15].substring(ari[15].indexOf("=") + 1), "UTF-8");
 									String incidentLocation = URLDecoder.decode(ari[16].substring(ari[16].indexOf("=") + 1), "UTF-8");
-									String incidentReason = URLDecoder.decode(ari[17].substring(ari[17].indexOf("=") + 1, ari[17].indexOf("HTTP/1.1")), "UTF-8");
+									String incidentReason = URLDecoder.decode(ari[17].substring(ari[17].indexOf("=") + 1), "UTF-8");
+									String witnesses = URLDecoder.decode(ari[18].substring(ari[18].indexOf("=") + 1), "UTF-8");
 									boolean anonymous = false;
 									try
 									{
-										if (URLDecoder.decode(ari[18].substring(ari[18].indexOf("=") + 1), "UTF-8").contains("anonymous=y"))
+										if (URLDecoder.decode(ari[19], "UTF-8").contains("anonymous=y"))
 										{
 											anonymous = true;
 										}
@@ -1222,7 +1225,7 @@ class ServerThread implements Runnable
 									cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
 									cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
 									Date d8 = cal.getTime();
-									Report bullyReport = new Report(schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), absentYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation);								
+									Report bullyReport = new Report(schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), absentYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation, witnesses);								
 									DataStore.reportList.add(bullyReport);
 									s += "\r\n" +
 											"<!DOCTYPE HTML>\n" + 
