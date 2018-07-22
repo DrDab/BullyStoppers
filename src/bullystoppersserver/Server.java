@@ -162,7 +162,7 @@ class ServerThread implements Runnable
 												"        	text-align: center;\n" + 
 												"    	}\n" +
 												"\n" +
-												"		.mascotbox {\n" + 
+												"		.mbox {\n" + 
 												"			background-repeat:no-repeat;\n" + 
 												"			background-attachment:fixed;\n" + 
 												"			background-position:50% 0%;\n" + 
@@ -214,7 +214,7 @@ class ServerThread implements Runnable
 												"			</div>\n" + 
 												"		\n" + 
 												"	</div>\n<br><br><br><br>" +
-												"	<div id=\"searchbox\" class='mascotbox'>\n" + 
+												"	<div id=\"searchbox\" class='mbox'>\n" + 
 												"		<div id=\"static-index\">\n" + 
 												"			<center>\n" + 
 												"			<h1 style=\"font-size: 2em;\">BullyStoppers On-Line Reporting System</h1>\n" +
@@ -223,7 +223,7 @@ class ServerThread implements Runnable
 												"	<div id='mainbox'></div>\n" + 
 												"</div>\n" + 
 												"<br>\n" +
-												"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
+												"<center><div id=\"searchbox\" class='mbox'>\n" + 
 												"	<div>\n" + 
 												"		<a href=\"/report_bullying.html\" title=\"Report an incident\"><font color=\"FF00CC\"><strong>[ Report an incident here... ]</strong></font></a>\n" + 
 												// " 		<p>\n" +
@@ -290,7 +290,7 @@ class ServerThread implements Runnable
 												"        	text-align: center;\n" + 
 												"    	}\n" +
 												"\n" +
-												"		.mascotbox {\n" + 
+												"		.mbox {\n" + 
 												"			background-repeat:no-repeat;\n" + 
 												"			background-attachment:fixed;\n" + 
 												"			background-position:50% 0%;\n" + 
@@ -342,7 +342,7 @@ class ServerThread implements Runnable
 												"			</div>\n" + 
 												"		\n" + 
 												"	</div>\n<br><br><br><br>" +
-												"	<div id=\"searchbox\" class='mascotbox'>\n" + 
+												"	<div id=\"searchbox\" class='mbox'>\n" + 
 												"		<div id=\"static-index\">\n" + 
 												"			<center>\n" + 
 												"			<h1 style=\"font-size: 2em;\">BullyStoppers On-Line Reporting System</h1>\n" +
@@ -351,11 +351,11 @@ class ServerThread implements Runnable
 												"	<div id='mainbox'></div>\n" + 
 												"</div>\n" + 
 												"<br>\n" +
-												"<center><div id=\"searchbox\" class='mascotbox'>\n" +
+												"<center><div id=\"searchbox\" class='mbox'>\n" +
 												"Welcome to the staff incident management console.<br>" +
 												"Click <a href=\"/view_incidents.html\" title=\"View incidents\"><font color=\"FF00CC\"><strong>[ here ]</strong></font></a> to view a list of bullying reports.<br>" +
 												"</div></center>" +
-												"<center><div id=\"searchbox\" class='mascotbox'>\n" +
+												"<center><div id=\"searchbox\" class='mbox'>\n" +
 												"Tickets currently open:<br>" +
 												"<strong>" + DataStore.reportList.size() + "</strong><br>" +
 												"</div></center>" +
@@ -422,7 +422,7 @@ class ServerThread implements Runnable
 									"			right:0;\n" + 
 									"		}\n" + 
 									"\n" + 
-									"		.mascotbox {\n" + 
+									"		.mbox {\n" + 
 									"			background-repeat:no-repeat;\n" + 
 									"			background-attachment:fixed;\n" + 
 									"			background-position:50% 0%;\n" + 
@@ -449,7 +449,7 @@ class ServerThread implements Runnable
 									"<br>\n" + 
 									"<br>\n" + 
 									"<br>\n" + 
-									"<div id='searchbox3' class='mascotbox'>\n" + 
+									"<div id='searchbox3' class='mbox'>\n" + 
 									"	<center>\n" + 
 									"	<p><strong>\n" + 
 									"	ERROR: Blank Login" +
@@ -513,7 +513,7 @@ class ServerThread implements Runnable
 										"			right:0;\n" + 
 										"		}\n" + 
 										"\n" + 
-										"		.mascotbox {\n" + 
+										"		.mbox {\n" + 
 										"			background-repeat:no-repeat;\n" + 
 										"			background-attachment:fixed;\n" + 
 										"			background-position:50% 0%;\n" + 
@@ -540,7 +540,7 @@ class ServerThread implements Runnable
 										"<br>\n" + 
 										"<br>\n" + 
 										"<br>\n" + 
-										"<div id='searchbox3' class='mascotbox'>\n" + 
+										"<div id='searchbox3' class='mbox'>\n" + 
 										"	<center>\n" + 
 										"	<p><strong>\n" + 
 										"	Login Successful" +
@@ -597,7 +597,7 @@ class ServerThread implements Runnable
 										"			right:0;\n" + 
 										"		}\n" + 
 										"\n" + 
-										"		.mascotbox {\n" + 
+										"		.mbox {\n" + 
 										"			background-repeat:no-repeat;\n" + 
 										"			background-attachment:fixed;\n" + 
 										"			background-position:50% 0%;\n" + 
@@ -624,7 +624,7 @@ class ServerThread implements Runnable
 										"<br>\n" + 
 										"<br>\n" + 
 										"<br>\n" + 
-										"<div id='searchbox3' class='mascotbox'>\n" + 
+										"<div id='searchbox3' class='mbox'>\n" + 
 										"	<center>\n" + 
 										"	<p><strong>\n" + 
 										"	ERROR: Incorrect login" +
@@ -689,7 +689,7 @@ class ServerThread implements Runnable
 								"			right:0;\n" + 
 								"		}\n" + 
 								"\n" + 
-								"		.mascotbox {\n" + 
+								"		.mbox {\n" + 
 								"			background-repeat:no-repeat;\n" + 
 								"			background-attachment:fixed;\n" + 
 								"			background-position:50% 0%;\n" + 
@@ -716,7 +716,7 @@ class ServerThread implements Runnable
 								"<br>\n" + 
 								"<br>\n" + 
 								"<br>\n" + 
-								"<div id='searchbox3' class='mascotbox'>\n" + 
+								"<div id='searchbox3' class='mbox'>\n" + 
 								"	<center>\n" + 
 								"	<p><strong>\n" + 
 								"	Logout Successful" +
@@ -799,7 +799,7 @@ class ServerThread implements Runnable
 											"			right:0;\n" + 
 											"		}\n" + 
 											"\n" + 
-											"		.mascotbox {\n" + 
+											"		.mbox {\n" + 
 											"			background-repeat:no-repeat;\n" + 
 											"			background-attachment:fixed;\n" + 
 											"			background-position:50% 0%;\n" + 
@@ -837,7 +837,7 @@ class ServerThread implements Runnable
 											"<br>\n" + 
 											"<br>\n" + 
 											"<br>\n" + 
-											"<div id='searchbox3' class='mascotbox'>\n" + 
+											"<div id='searchbox3' class='mbox'>\n" + 
 											"	<center>\n" + 
 											"	<p>\n" + 
 											"	<strong>Report a bullying incident</strong>" +
@@ -1024,7 +1024,7 @@ class ServerThread implements Runnable
 											"			right:0;\n" + 
 											"		}\n" + 
 											"\n" + 
-											"		.mascotbox {\n" + 
+											"		.mbox {\n" + 
 											"			background-repeat:no-repeat;\n" + 
 											"			background-attachment:fixed;\n" + 
 											"			background-position:50% 0%;\n" + 
@@ -1062,7 +1062,7 @@ class ServerThread implements Runnable
 											"<br>\n" + 
 											"<br>\n" + 
 											"<br>\n" + 
-											"<div id='searchbox3' class='mascotbox'>\n" + 
+											"<div id='searchbox3' class='mbox'>\n" + 
 											"	<center>\n" + 
 											"	<p>\n" + 
 											"	<strong>Report general concern</strong>" +
@@ -1256,7 +1256,7 @@ class ServerThread implements Runnable
 											"			right:0;\n" + 
 											"		}\n" + 
 											"\n" + 
-											"		.mascotbox {\n" + 
+											"		.mbox {\n" + 
 											"			background-repeat:no-repeat;\n" + 
 											"			background-attachment:fixed;\n" + 
 											"			background-position:50% 0%;\n" + 
@@ -1283,7 +1283,7 @@ class ServerThread implements Runnable
 											"<br>\n" + 
 											"<br>\n" + 
 											"<br>\n" + 
-											"<div id='searchbox3' class='mascotbox'>\n" + 
+											"<div id='searchbox3' class='mbox'>\n" + 
 											"	<center>\n" + 
 											"	<p>\n" + 
 											"	<strong>Report Submitted Successfully</strong><br><br>Your request has been submitted successfully.<br>Thank you for using BullyStoppers.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
@@ -1399,7 +1399,7 @@ class ServerThread implements Runnable
 											"			right:0;\n" + 
 											"		}\n" + 
 											"\n" + 
-											"		.mascotbox {\n" + 
+											"		.mbox {\n" + 
 											"			background-repeat:no-repeat;\n" + 
 											"			background-attachment:fixed;\n" + 
 											"			background-position:50% 0%;\n" + 
@@ -1426,7 +1426,7 @@ class ServerThread implements Runnable
 											"<br>\n" + 
 											"<br>\n" + 
 											"<br>\n" + 
-											"<div id='searchbox3' class='mascotbox'>\n" + 
+											"<div id='searchbox3' class='mbox'>\n" + 
 											"	<center>\n" + 
 											"	<p>\n" + 
 											"	<strong>Report Submitted Successfully</strong><br><br>Your request has been submitted successfully.<br>Thank you for using BullyStoppers.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
@@ -1489,14 +1489,34 @@ class ServerThread implements Runnable
 									{
 										// teacher page
 										// return this page if teacher in active directory group
+										String generatedIncidentList = "";
+										for(Report rep : DataStore.reportList)
+										{
+											generatedIncidentList += 
+															"<center><div id=\"searchbox\" class='mbox'>\n" +
+															"	<div class=\"contentcontainer med left\" style=\"margin-left: 50px;\">";
+											if (rep.getIncidentType() == 0)
+											{
+												// bullying
+												
+											}
+											else if (rep.getIncidentType() == 1)
+											{
+												// general incident
+												
+											}
+											generatedIncidentList += 
+															"	</div>" + 
+															"</div></center>";
+										}
 										s += "\r\n" + 
 												"<!DOCTYPE HTML>\n" + 
 												"<html>\n" + 
 												"<head>\n" + 
 												"	<meta charset='utf-8'>\n" + 
-												"	<title>BullyStoppers Home</title> \n" + 
+												"	<title>BullyStoppers Reports</title> \n" + 
 												"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
-												"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
+												"	<link rel=\"top\" title=\"BullyStoppers Reports\" href=\"/\">			\n" + 
 												"	<style type=\"text/css\">\n" + 
 												"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
 												"			font-family:verdana,sans-serif;\n" + 
@@ -1525,7 +1545,7 @@ class ServerThread implements Runnable
 												"        	text-align: center;\n" + 
 												"    	}\n" +
 												"\n" +
-												"		.mascotbox {\n" + 
+												"		.mbox {\n" + 
 												"			background-repeat:no-repeat;\n" + 
 												"			background-attachment:fixed;\n" + 
 												"			background-position:50% 0%;\n" + 
@@ -1577,23 +1597,9 @@ class ServerThread implements Runnable
 												"			</div>\n" + 
 												"		\n" + 
 												"	</div>\n<br><br><br><br>" +
-												"	<div id=\"searchbox\" class='mascotbox'>\n" + 
-												"		<div id=\"static-index\">\n" + 
-												"			<center>\n" + 
-												"			<h1 style=\"font-size: 2em;\">BullyStoppers On-Line Reporting System</h1>\n" +
-												"			</center>\n" + 
-												"		</div>\n" + 
-												"	<div id='mainbox'></div>\n" + 
+												generatedIncidentList +
 												"</div>\n" + 
 												"<br>\n" +
-												"<center><div id=\"searchbox\" class='mascotbox'>\n" +
-												"Welcome to the staff incident management console.<br>" +
-												"Click <a href=\"/view_incidents.html\" title=\"View incidents\"><font color=\"FF00CC\"><strong>[ here ]</strong></font></a> to view a list of bullying reports.<br>" +
-												"</div></center>" +
-												"<center><div id=\"searchbox\" class='mascotbox'>\n" +
-												"Tickets currently open:<br>" +
-												"<strong>" + DataStore.reportList.size() + "</strong><br>" +
-												"</div></center>" +
 												"<center><br />\n" + 
 												"<font size=\"1\">" +
 												"        Page generated in " +
@@ -1675,7 +1681,7 @@ class ServerThread implements Runnable
 				"        	text-align: center;\n" + 
 				"    	}\n" +
 				"\n" +
-				"		.mascotbox {\n" + 
+				"		.mbox {\n" + 
 				"			background-repeat:no-repeat;\n" + 
 				"			background-attachment:fixed;\n" + 
 				"			background-position:50% 0%;\n" + 
@@ -1718,7 +1724,7 @@ class ServerThread implements Runnable
 				"<br><br><br><br>\n" +
 				"<div><center><h2><strong>Welcome to BullyStoppers!</strong></h2></center></div>\n" +
 				"<br>\n" +
-				"<center><div id=\"searchbox\" class='mascotbox'>\n" + 
+				"<center><div id=\"searchbox\" class='mbox'>\n" + 
 				"		<h2>Login</h2>\n" + 
 				"<div class='section' style=\"width:500px;\">\n" + 
 				"\n" + 
@@ -1783,7 +1789,7 @@ class ServerThread implements Runnable
 				"			right:0;\n" + 
 				"		}\n" + 
 				"\n" + 
-				"		.mascotbox {\n" + 
+				"		.mbox {\n" + 
 				"			background-repeat:no-repeat;\n" + 
 				"			background-attachment:fixed;\n" + 
 				"			background-position:50% 0%;\n" + 
@@ -1810,7 +1816,7 @@ class ServerThread implements Runnable
 				"<br>\n" + 
 				"<br>\n" + 
 				"<br>\n" + 
-				"<div id='searchbox3' class='mascotbox'>\n" + 
+				"<div id='searchbox3' class='mbox'>\n" + 
 				"	<center>\n" + 
 				"	<p>\n" + 
 				"	<strong>ERROR 400: Bad Request</strong><br><br>We're sorry, something went wrong and we couldn't parse your request.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
@@ -1867,7 +1873,7 @@ class ServerThread implements Runnable
 				"			right:0;\n" + 
 				"		}\n" + 
 				"\n" + 
-				"		.mascotbox {\n" + 
+				"		.mbox {\n" + 
 				"			background-repeat:no-repeat;\n" + 
 				"			background-attachment:fixed;\n" + 
 				"			background-position:50% 0%;\n" + 
@@ -1894,7 +1900,7 @@ class ServerThread implements Runnable
 				"<br>\n" + 
 				"<br>\n" + 
 				"<br>\n" + 
-				"<div id='searchbox3' class='mascotbox'>\n" + 
+				"<div id='searchbox3' class='mbox'>\n" + 
 				"	<center>\n" + 
 				"	<p>\n" + 
 				"	<strong>ERROR 404: Page Not Found.</strong><br><br>We're sorry, the page requested was not found on this server.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
@@ -1951,7 +1957,7 @@ class ServerThread implements Runnable
 				"			right:0;\n" + 
 				"		}\n" + 
 				"\n" + 
-				"		.mascotbox {\n" + 
+				"		.mbox {\n" + 
 				"			background-repeat:no-repeat;\n" + 
 				"			background-attachment:fixed;\n" + 
 				"			background-position:50% 0%;\n" + 
@@ -1978,7 +1984,7 @@ class ServerThread implements Runnable
 				"<br>\n" + 
 				"<br>\n" + 
 				"<br>\n" + 
-				"<div id='searchbox3' class='mascotbox'>\n" + 
+				"<div id='searchbox3' class='mbox'>\n" + 
 				"	<center>\n" + 
 				"	<p>\n" + 
 				"	<strong>Access Denied</strong><br><br>This resource cannot be served because your account does not have<br>the adequate permissions to access this resource.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
