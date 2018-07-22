@@ -1709,7 +1709,6 @@ class ServerThread implements Runnable
 											{
 												reportDescription += ("<strong>Subject:</strong> " + rep.getSubject() + "<br>\n");
 												reportDescription += ("<strong>Incident Type:</strong> General Concern<br>\n");
-												reportDescription += ("<strong>Subject:</strong> " + rep.getSubject() + "<br>\n");
 												reportDescription += ("<strong>Date of Incident:</strong> " + month + "/" + date + "/" + year + "<br>\n");
 												reportDescription += ("<strong>School:</strong> " + rep.getSchool() + "<br>\n");
 												reportDescription += ("<strong>Description:</strong> " + rep.getIncidentDescription() + "<br>\n");
