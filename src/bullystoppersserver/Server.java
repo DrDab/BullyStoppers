@@ -1226,7 +1226,8 @@ class ServerThread implements Runnable
 									}
 									else
 									{
-										witnesses = URLDecoder.decode(ari[18].substring(ari[18].indexOf("=", ari[18].indexOf("HTTP/1.1")) + 1), "UTF-8");
+										System.out.println(ari[18]);
+										witnesses = URLDecoder.decode(ari[18].substring(ari[18].indexOf("=") + 1, ari[18].indexOf(" HTTP/1.1")), "UTF-8");
 									}
 									Calendar cal = Calendar.getInstance();
 									cal.set(Calendar.YEAR, Integer.parseInt(year));
