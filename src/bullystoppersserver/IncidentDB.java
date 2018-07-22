@@ -1,7 +1,9 @@
 package bullystoppersserver;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -33,6 +35,8 @@ public class IncidentDB
 	private Queue<Request> toGet = new LinkedList<Request>();
 	private Queue<Report> toClose = new LinkedList<Report>();
 	 
+	private HashMap hm = new HashMap<Double, ArrayList<Report>>();
+	
 	 // q.remove will remove the one last.
 	 
 	 private Connection con;
@@ -123,7 +127,22 @@ public class IncidentDB
 			 }
 			 while(!toGet.isEmpty())
 			 {
-				 
+				 Request req = toGet.remove();
+				 double requestTime = req.getRequestTime();
+				 ArrayList<Report> toReturn = new ArrayList<Report>();
+				 ResultSet rs;
+				 try
+				 {
+					rs = statement.executeQuery("select * fom incidents");
+					while(rs.next())
+					{
+						
+					}
+				 }
+				 catch (SQLException e)
+				 {
+					e.printStackTrace();
+				 }
 			 }
 			 while(!toClose.isEmpty())
 			 {
@@ -147,14 +166,39 @@ public class IncidentDB
 		toAdd.add(report);
 	 }
 	 
+	 public ArrayList<Report> queryReports()
+	 {
+		 double tmpRequest = System.nanoTime();
+		 toGet.add(new Request(tmpRequest));
+		 for(;;)
+		 {
+			 if (hm.containsKey(tmpRequest))
+			 {
+				 return (ArrayList<Report>) hm.get(tmpRequest);
+			 }
+		 }
+	 }
+	 
 	 public void closeReport(Report report)
 	 {
-		 
+		 toClose.add(report);
 	 }
 	 
 }
 
 class Request
 {
+
+	private double tmpRequest;
+	
+	public Request(double tmpRequest) 
+	{
+		this.tmpRequest = tmpRequest;
+	}
+	
+	public double getRequestTime()
+	{
+		return tmpRequest;
+	}
 	
 }
