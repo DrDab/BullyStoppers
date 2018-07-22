@@ -69,7 +69,7 @@ public class IncidentDB
 			 {
 				 Chocolat.println("[" + st.elapsedTime() + "] SQLite table incidents doesn't exist, creating new table of incidents.");
 				 statement.executeUpdate("drop table incidents");
-				 statement.executeUpdate("create table incidents (subject text, type int, anonymous int, month int, day int, year int, description text, school text, injurybool int, absencebool int, adultscontacted text, injuriessustained text, learnmethod text, bullyingreason text, targetedstudents text, bullynames text, incidentlocation text, witnessnames text, name text, email text, phone text, isclosed int)");
+				 statement.executeUpdate("create table incidents (id int, subject text, type int, anonymous int, month int, day int, year int, description text, school text, injurybool int, absencebool int, adultscontacted text, injuriessustained text, learnmethod text, bullyingreason text, targetedstudents text, bullynames text, incidentlocation text, witnessnames text, name text, email text, phone text, isclosed int)");
 			 }
 		 }
 		 catch (SQLException e)
@@ -91,6 +91,7 @@ public class IncidentDB
 					 Date incidentDate = report.getIncidentDate();
 					 Calendar cal = Calendar.getInstance();
 					 cal.setTime(incidentDate);
+					 int id = report.getID();
 					 String subject = report.getSubject();
 					 int incidentType = report.getIncidentType();
 					 int anonymous = report.isAnonymous() ? 1 : 0;
@@ -113,7 +114,7 @@ public class IncidentDB
 					 String email = report.getReportingPersonEmail();
 					 String phone = report.getReportingPersonPhone();
 					 int isClosed = !report.isOpen() ? 1 : 0;
-					 statement.executeUpdate("insert into record values('" + subject + "', " + incidentType + "," + anonymous + "," + month + "," + date + "," + year + ",'" + description + "','" + school + "'," + injuryResulted + "," + absenceResulted + ",'" + adultsContacted + "','" + injuriesSustained + "','" + howDidYouLearnAboutThis + "','" + bullyingReason + "','" + targetedStudents + "','" + bullyNames + "','" + incidentLocation + "','" + witnessNames + "','" + name + "','" + email + "','" + phone + "'," + isClosed + ")");
+					 statement.executeUpdate("insert into incidents values(" + id + ",'" + subject + "', " + incidentType + "," + anonymous + "," + month + "," + date + "," + year + ",'" + description + "','" + school + "'," + injuryResulted + "," + absenceResulted + ",'" + adultsContacted + "','" + injuriesSustained + "','" + howDidYouLearnAboutThis + "','" + bullyingReason + "','" + targetedStudents + "','" + bullyNames + "','" + incidentLocation + "','" + witnessNames + "','" + name + "','" + email + "','" + phone + "'," + isClosed + ")");
 				 }
 				 catch (Exception e)
 				 {
@@ -126,7 +127,17 @@ public class IncidentDB
 			 }
 			 while(!toClose.isEmpty())
 			 {
-				 
+				 try
+				 {
+					 Report report = toClose.remove();
+					 int id = report.getID();
+					 statement.executeUpdate("UPDATE incidents SET isclosed = 1 WHERE id = " + id);
+				 }
+				 catch (Exception e)
+				 {
+					 e.printStackTrace();
+				 }
+				
 			 }
 		 }
 	 }
@@ -136,10 +147,11 @@ public class IncidentDB
 		toAdd.add(report);
 	 }
 	 
-	 public static void updateReport(Report report)
+	 public void closeReport(Report report)
 	 {
 		 
 	 }
+	 
 }
 
 class Request

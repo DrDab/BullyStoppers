@@ -33,11 +33,13 @@ public class Report
 	private String reportingPersonPhoneNumber = "";
 	
 	// details on ticket information.
+	private int id = -1;
 	private boolean isClosed = false;
 	
 	// constructor (for general incident)
-	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, String incidentDescription, Date incidentDate)
+	public Report(int id, String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, String incidentDescription, Date incidentDate)
 	{
+		this.id = id;
 		this.school = school;
 		this.incidentType = incidentType;
 		this.subject = subject;
@@ -50,8 +52,9 @@ public class Report
 	}
 	
 	// constructor (for bullying incident)
-	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, boolean injuryResulted, boolean absenceResulted, String schoolAdultsContacted, String injuriesSustained, String howDidYouLearnAboutThis, String bullyingReason, Date incidentDate, String targetedStudents, String bullyNames, String incidentDescription, String bullyingIncidentLocation, String witnessNames)
+	public Report(int id, String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, boolean injuryResulted, boolean absenceResulted, String schoolAdultsContacted, String injuriesSustained, String howDidYouLearnAboutThis, String bullyingReason, Date incidentDate, String targetedStudents, String bullyNames, String incidentDescription, String bullyingIncidentLocation, String witnessNames)
 	{
+		this.id = id;
 		this.school = school;
 		this.incidentType = incidentType;
 		this.subject = subject;
@@ -182,6 +185,11 @@ public class Report
 	public boolean isOpen()
 	{
 		return !isClosed;
+	}
+	
+	public int getID()
+	{
+		return id;
 	}
 	
 }

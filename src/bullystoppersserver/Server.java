@@ -1234,7 +1234,7 @@ class ServerThread implements Runnable
 									cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
 									cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
 									Date d8 = cal.getTime();
-									Report bullyReport = new Report(schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), absentYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation, witnesses);								
+									Report bullyReport = new Report(DataStore.reportList.size(), schoolname, 0, subject, anonymous, name, email, phone, injuryYN.matches("y"), absentYN.matches("y"), adultscontacted, injurydescription, learnmethoddescription, incidentReason, d8, bulliedstudents, bullies, incidentDescription, incidentLocation, witnesses);								
 									DataStore.reportList.add(bullyReport);
 									s += "\r\n" +
 											"<!DOCTYPE HTML>\n" + 
@@ -1377,7 +1377,7 @@ class ServerThread implements Runnable
 									cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
 									cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date));
 									Date d8 = cal.getTime();
-									Report bullyReport = new Report(schoolname, 1, subject, anonymous, name, email, phone, incidentDescription, d8);								
+									Report bullyReport = new Report(DataStore.reportList.size(), schoolname, 1, subject, anonymous, name, email, phone, incidentDescription, d8);								
 									DataStore.reportList.add(bullyReport);
 									s += "\r\n" +
 											"<!DOCTYPE HTML>\n" + 
