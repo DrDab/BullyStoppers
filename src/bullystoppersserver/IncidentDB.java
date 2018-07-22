@@ -3,6 +3,13 @@ package bullystoppersserver;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class IncidentDB 
 {
 	// a wrapper of functions to store and retrieve the bullying reports.
@@ -18,11 +25,46 @@ public class IncidentDB
 	// the ID-map should be destroyed.
 	// IncidentDB should run in a while(true) loop, and repeatedly check if any of the queues
 	// are not empty.
-	 private static Queue<Request> toAdd = new LinkedList<Request>();
+	 private static Queue<Report> toAdd = new LinkedList<Report>();
 	 private static Queue<Request> toGet = new LinkedList<Request>();
-	 private static Queue<Request> toClose = new LinkedList<Request>();
+	 private static Queue<Report> toClose = new LinkedList<Report>();
 	 
 	 // q.remove will remove the one last.
+	 
+	 private static Connection con;
+	 
+	 public static void initSQL(String filePath)
+	 {
+		 try 
+		 {
+			Class.forName("org.sqlite.JDBC");
+		 } 
+		 catch (ClassNotFoundException e)
+		 {
+			e.printStackTrace();
+		 }
+		 
+		 try
+		 {
+			 con = DriverManager.getConnection("jdbc:sqlite:reports.db");
+			 DatabaseMetaData dbm = con.getMetaData();
+			// check if "employee" table is there
+			 ResultSet tables = dbm.getTables(null, null, "incidents", null);
+			 if(tables.next())
+			 {
+				 
+			 }
+			 else
+			 {
+				 
+			 }
+		 }
+		 catch (SQLException e)
+		 {
+			 e.printStackTrace();
+		 }
+		 
+	 }
 	 
 	 public static void run()
 	 {
@@ -42,7 +84,16 @@ public class IncidentDB
 			 }
 		 }
 	 }
-	
+	 
+	 public static void addReport(Report report)
+	 {
+		toAdd.add(report);
+	 }
+	 
+	 public static void updateReport(Report report)
+	 {
+		 
+	 }
 }
 
 class Request
