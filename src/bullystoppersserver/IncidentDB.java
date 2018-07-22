@@ -10,6 +10,7 @@ import java.util.Queue;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -138,7 +139,12 @@ public class IncidentDB
 					String email = rs.getString("email");
 					String phone = rs.getString("phone");
 					boolean isClosed = (rs.getInt("isclosed") == 1);
-					toReturn.add(new Report(id, school, 0, subject, anonymous, name, email, phone, injuryResulted, absenceResulted, adultsContacted, injuriesSustained, learnMethod, bullyingReason, d8, targetedStudents, bullyNames, incidentDescription, incidentLocation, witnessNames));
+					Report r = new Report(id, school, 0, subject, anonymous, name, email, phone, injuryResulted, absenceResulted, adultsContacted, injuriesSustained, learnMethod, bullyingReason, d8, targetedStudents, bullyNames, incidentDescription, incidentLocation, witnessNames);
+					if (isClosed)
+					{
+						r.closeReport();
+					}
+					toReturn.add(r);
 				}
 				else
 				{
@@ -159,7 +165,13 @@ public class IncidentDB
 					cal.set(Calendar.MONTH, month - 1);
 					cal.set(Calendar.DAY_OF_MONTH, date);
 					Date d8 = cal.getTime();
-					toReturn.add(new Report(id, school, 1, subject, anonymous, name, email, phone, incidentDescription, d8));
+					Report r = new Report(id, school, 1, subject, anonymous, name, email, phone, incidentDescription, d8);
+					boolean isClosed = (rs.getInt("isclosed") == 1);
+					if (isClosed)
+					{
+						r.closeReport();
+					}
+					toReturn.add(r);
 				}
 			}
 		 }
@@ -206,7 +218,12 @@ public class IncidentDB
 					String email = rs.getString("email");
 					String phone = rs.getString("phone");
 					boolean isClosed = (rs.getInt("isclosed") == 1);
-					return (new Report(id2, school, 0, subject, anonymous, name, email, phone, injuryResulted, absenceResulted, adultsContacted, injuriesSustained, learnMethod, bullyingReason, d8, targetedStudents, bullyNames, incidentDescription, incidentLocation, witnessNames));
+					Report r = new Report(id2, school, 0, subject, anonymous, name, email, phone, injuryResulted, absenceResulted, adultsContacted, injuriesSustained, learnMethod, bullyingReason, d8, targetedStudents, bullyNames, incidentDescription, incidentLocation, witnessNames);
+					if (isClosed)
+					{
+						r.closeReport();
+					}
+					return (r);
 				}
 				else
 				{
@@ -242,7 +259,11 @@ public class IncidentDB
 		 try
 		 {
 			 int id = report.getID();
-			 statement.executeUpdate("UPDATE incidents SET isclosed = 1 WHERE id = " + id);
+			 String query = "UPDATE incidents SET isclosed=1 WHERE id='?'";
+			 PreparedStatement statement = con.prepareStatement(query);
+			 statement.setInt(1, id);
+			 statement.executeUpdate();
+			 con.commit();
 		 }
 		 catch (Exception e)
 		 {
@@ -270,7 +291,7 @@ public class IncidentDB
 		 {
 			e.printStackTrace();
 		 }
-		 return best;
+		 return best + 1;
 	 }
 	 
 }
