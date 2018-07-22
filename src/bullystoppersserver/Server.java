@@ -1204,7 +1204,7 @@ class ServerThread implements Runnable
 									String name = URLDecoder.decode(ari[14].substring(ari[14].indexOf("=") + 1), "UTF-8");
 									String incidentDescription = URLDecoder.decode(ari[15].substring(ari[15].indexOf("=") + 1), "UTF-8");
 									String incidentLocation = URLDecoder.decode(ari[16].substring(ari[16].indexOf("=") + 1), "UTF-8");
-									String incidentReason = URLDecoder.decode(ari[17].substring(ari[17].indexOf("=") + 1), "UTF-8");
+									String incidentReason = URLDecoder.decode(ari[17].substring(ari[17].indexOf("=") + 1, ari[17].indexOf("HTTP/1.1")), "UTF-8");
 									boolean anonymous = false;
 									try
 									{
