@@ -1,5 +1,7 @@
 package bullystoppersserver;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -34,7 +36,7 @@ public class IncidentDB
 	 // q.remove will remove the one last.
 	 
 	 private Connection con;
-	 
+	 private Statement statement;
 	 
 	 public IncidentDB(Stopwatch st)
 	 {
@@ -56,7 +58,7 @@ public class IncidentDB
 		 try
 		 {
 			 con = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-			 Statement statement = con.createStatement();
+			 statement = con.createStatement();
 			 DatabaseMetaData dbm = con.getMetaData();
 			 ResultSet tables = dbm.getTables(null, null, "incidents", null);
 			 if(tables.next())
@@ -67,7 +69,7 @@ public class IncidentDB
 			 {
 				 Chocolat.println("[" + st.elapsedTime() + "] SQLite table incidents doesn't exist, creating new table of incidents.");
 				 statement.executeUpdate("drop table incidents");
-				 statement.executeUpdate("create table incidents (subject text, type int, anonymous int, month int, day int, year int, description text, school text, injurybool int, absencebool int, adultscontacted text, injuriessustained text, learnmethod text, bullyingreason text, targetedstudents text, bullynames text, incidentlocation text, witnessnames text, name text, email text, phone text)");
+				 statement.executeUpdate("create table incidents (subject text, type int, anonymous int, month int, day int, year int, description text, school text, injurybool int, absencebool int, adultscontacted text, injuriessustained text, learnmethod text, bullyingreason text, targetedstudents text, bullynames text, incidentlocation text, witnessnames text, name text, email text, phone text, isclosed int)");
 			 }
 		 }
 		 catch (SQLException e)
@@ -83,7 +85,40 @@ public class IncidentDB
 		 {
 			 while(!toAdd.isEmpty())
 			 {
-				 
+				 try
+				 {
+					 Report report = toAdd.remove();
+					 Date incidentDate = report.getIncidentDate();
+					 Calendar cal = Calendar.getInstance();
+					 cal.setTime(incidentDate);
+					 String subject = report.getSubject();
+					 int incidentType = report.getIncidentType();
+					 int anonymous = report.isAnonymous() ? 1 : 0;
+					 int month = cal.get(Calendar.MONTH) + 1;
+					 int date = cal.get(Calendar.DAY_OF_MONTH);
+					 int year = cal.get(Calendar.YEAR);
+					 String description = report.getIncidentDescription();
+					 String school = report.getSchool();
+					 int injuryResulted = report.injuryResulted() ? 1 : 0;
+					 int absenceResulted = report.absenceResulted() ? 1 : 0;
+					 String adultsContacted = report.getAdultsContacted();
+					 String injuriesSustained = report.getInjuriesSustained();
+					 String howDidYouLearnAboutThis = report.getLearnedReason();
+					 String bullyingReason = report.getBullyingReason();
+					 String targetedStudents = report.getTargetedStudents();
+					 String bullyNames = report.getBullyNames();
+					 String incidentLocation = report.getIncidentLocation();
+					 String witnessNames = report.getWitnessNames();
+					 String name = report.getReportingPersonName();
+					 String email = report.getReportingPersonEmail();
+					 String phone = report.getReportingPersonPhone();
+					 int isClosed = !report.isOpen() ? 1 : 0;
+					 statement.executeUpdate("insert into record values('" + subject + "', " + incidentType + "," + anonymous + "," + month + "," + date + "," + year + ",'" + description + "','" + school + "'," + injuryResulted + "," + absenceResulted + ",'" + adultsContacted + "','" + injuriesSustained + "','" + howDidYouLearnAboutThis + "','" + bullyingReason + "','" + targetedStudents + "','" + bullyNames + "','" + incidentLocation + "','" + witnessNames + "','" + name + "','" + email + "','" + phone + "'," + isClosed + ")");
+				 }
+				 catch (Exception e)
+				 {
+					 e.printStackTrace();
+				 }
 			 }
 			 while(!toGet.isEmpty())
 			 {
