@@ -1490,8 +1490,9 @@ class ServerThread implements Runnable
 										// teacher page
 										// return this page if teacher in active directory group
 										String generatedIncidentList = "";
-										for(Report rep : DataStore.reportList)
+										for(int i = 0; i < DataStore.reportList.size(); i++)
 										{
+											Report rep = DataStore.reportList.get(i);
 											Date incidentDate = rep.getIncidentDate();
 											Calendar cal = Calendar.getInstance();
 											cal.setTime(incidentDate);
@@ -1509,7 +1510,6 @@ class ServerThread implements Runnable
 												"		<strong>Subject: " + rep.getSubject() +"</strong><br>\n" +
 												"		<strong>School: " + rep.getSchool() +"</strong><br>\n" +
 												"		Incident Date: " + month + "/" + date + "/" + year;
-												// "		<strong>Subject: " + rep.getSubject() +"</strong><br>\n";
 											}
 											else if (rep.getIncidentType() == 1)
 											{
@@ -1518,8 +1518,10 @@ class ServerThread implements Runnable
 												"		<strong>Type: General Concern</strong><br>\n" +
 												"		<strong>Subject: " + rep.getSubject() +"</strong><br>\n" +
 												"		<strong>School: " + rep.getSchool() +"</strong><br>\n" +
-												"		Incident Date: " + month + "/" + date + "/" + year;
+												"		Incident Date: " + month + "/" + date + "/" + year + "<br>";
 											}
+											generatedIncidentList += 
+												"		<br><a href=\"/view_ticket.html?id=" + i + "\" title=\"View the ticket\"><font color=\"FF00CC\">[ View the ticket here... ]</font></a>";
 											generatedIncidentList += 
 															"	</div>" + 
 															"</div></center>";
@@ -1625,6 +1627,157 @@ class ServerThread implements Runnable
 												"<br></font></center>" +
 												"</body>\n" + 
 												"</html>\n";
+									}
+									else
+									{
+										sendAccessDenied(start);
+									}
+								}
+								else
+								{
+									requestUserLogin(start);
+								}
+							}
+						}
+					}
+					else if (receiveMessage.contains("GET /view_ticket.html"))
+					{
+						Chocolat.println(receiveMessage);
+						if (receiveMessage.indexOf("Cookie: ") == -1)
+						{
+							// present the login page.
+							requestUserLogin(start);
+						}
+						else
+						{
+							int p1 = receiveMessage.indexOf("user_authtokken=");
+							String token = "";
+							if (p1 == -1)
+							{
+								requestUserLogin(start);
+							}
+							else
+							{
+								token = receiveMessage.substring(p1 + 16, p1 + 16 + 36);
+								if (DataStore.authenticated.containsKey(token))
+								{
+									User tmpusr = DataStore.authenticated.get(token);
+									String username = tmpusr.getUsername();
+									int accountType = tmpusr.getAccountType();
+									if (accountType == 1 || accountType == 2)
+									{
+										try
+										{
+											String idstr = receiveMessage.substring(receiveMessage.indexOf("?id=") + 4, receiveMessage.indexOf("HTTP"));
+											s += "\r\n" + 
+													"<!DOCTYPE HTML>\n" + 
+													"<html>\n" + 
+													"<head>\n" + 
+													"	<meta charset='utf-8'>\n" + 
+													"	<title>BullyStoppers Home</title> \n" + 
+													"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+													"	<link rel=\"top\" title=\"BullyStoppers login\" href=\"/\">			\n" + 
+													"	<style type=\"text/css\">\n" + 
+													"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+													"			font-family:verdana,sans-serif;\n" + 
+													"			color:white;\n" + 
+													"			margin:0;\n" + 
+													"			padding:0;\n" + 
+													"			background:none;\n" + 
+													"		}\n" + 
+													"\n" + 
+													"		body {\n" + 
+													"			background-attachment:fixed;\n" + 
+													"			background-position:50% 0%;\n" + 
+													"			background-repeat:no-repeat;\n" + 
+													"			background-color:#012e57;\n" + 
+													"		}\n" + 
+													"\n" + 
+													"		div#content2 {\n" + 
+													"			text-align: center;\n" + 
+													"			position:absolute;\n" + 
+													"			top:28em;\n" + 
+													"			left:0;\n" + 
+													"			right:0;\n" + 
+													"		}\n" + 
+													"\n" + 
+													"    	.center-td {\n" + 
+													"        	text-align: center;\n" + 
+													"    	}\n" +
+													"\n" +
+													"		.mbox {\n" + 
+													"			background-repeat:no-repeat;\n" + 
+													"			background-attachment:fixed;\n" + 
+													"			background-position:50% 0%;\n" + 
+													"			margin-left: auto;\n" + 
+													"			margin-right: auto;\n" + 
+													"			margin-top:10px;\n" + 
+													"			margin-bottom:10px;\n" + 
+													"			padding:2px 0px;\n" + 
+													"			width:480px;\n" + 
+													"			border-radius: 5px;\n" + 
+													"			box-shadow: 0px 0px 5px #000;\n" + 
+													"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+													"		}\n" + 
+													"\n" + 
+													"		#searchbox { padding-bottom:5px; }\n" + 
+													"		#searchbox3 { font-size: 80%; }\n" + 
+													"		#searchbox4 { font-size: 60%; }\n" + 
+													"\n" +
+													"		.block-menu-top td{background-color:#202224} .header_bkg{background-color:#202224}\n" +
+													"		li.noblock{padding-right:14px}ul.dropdown li.noblock a{display:inline-block;padding:7px 0}ul.dropdown li.noblock a:first-child{padding-left:14px}ul.dropdown li.noblock a:empty{display:none}" +
+													"	</style>\n" + 
+													"</head>\n" + 
+													"<body>\n" +
+													"<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"block-menu-top\">\n" + 
+													"    <tr>\n" + 
+													"        <td class=\"header_bkg\">\n" + 
+													"            <ul>\n" + 
+													"                <li class=\"noblock\">Welcome, " + username +" | <a href=\"/logout.html\">Log out</a></li>\n" + 
+													"            </ul>\n" + 
+													"        </td>\n" + 
+													"    </tr>\n" + 
+													"</table>" + // osdjoof
+													"	<div id=\"notices\">\n" + 
+													"		\n" + 
+													"			<div id=\"notice\" style=\"display:none;\">\n" + 
+													"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
+													"				<p></p>\n" + 
+													"			</div>\n" + 
+													"		\n" + 
+													"\n" + 
+													"		\n" + 
+													"			<div id=\"warning\" style=\"display: none;\"></div>\n" + 
+													"		\n" + 
+													"\n" + 
+													"		\n" + 
+													"			<div id=\"error\" style=\"display:none;\">\n" + 
+													"				<div class=\"closebutton\" onclick=\"noticeClose(this.parentNode);\">X</div>\n" + 
+													"				<p></p>\n" + 
+													"			</div>\n" + 
+													"		\n" + 
+													"	</div>\n<br><br><br><br>" +
+													"</div>\n" + 
+													"<br>\n" +
+													"<center><div id=\"searchbox\" class='mbox'>\n" + 
+													// TODO: Insert text descriptors and "Close Ticket" Button here!
+													"</div></center>" +
+													"<center><br />\n" + 
+													"<font size=\"1\">" +
+													"        Page generated in " +
+													(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+													" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+													"        Server Local Time: " +
+													DataStore.refDate.toString() +
+													"<br></font></center>" +
+													"</body>\n" + 
+													"</html>\n";
+										}
+										catch (Exception e)
+										{
+											send400(start);
+										}
+										
 									}
 									else
 									{

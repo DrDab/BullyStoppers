@@ -15,4 +15,9 @@ public class DataStore
 	public static HashMap<String, User> authenticated = new HashMap<String, User>();
 	
 	public static ArrayList<Report> reportList = new ArrayList<Report>();
+	
+	public static ArrayList<Report> fetchReportListFromJson(String path)
+	{
+		return null;
+	}
 }
