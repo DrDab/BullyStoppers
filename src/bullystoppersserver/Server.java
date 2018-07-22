@@ -357,7 +357,7 @@ class ServerThread implements Runnable
 												"</div></center>" +
 												"<center><div id=\"searchbox\" class='mbox'>\n" +
 												"Tickets currently open:<br>" +
-												"<strong>" + DataStore.reportList.size() + "</strong><br>" +
+												"<strong>" + DataStore.getIncidentsOpen() + "</strong><br>" +
 												"</div></center>" +
 												"<center><br />\n" + 
 												"<font size=\"1\">" +
@@ -1493,38 +1493,41 @@ class ServerThread implements Runnable
 										for(int i = 0; i < DataStore.reportList.size(); i++)
 										{
 											Report rep = DataStore.reportList.get(i);
-											Date incidentDate = rep.getIncidentDate();
-											Calendar cal = Calendar.getInstance();
-											cal.setTime(incidentDate);
-											int month = cal.get(Calendar.MONTH) + 1;
-											int date = cal.get(Calendar.DAY_OF_MONTH);
-											int year = cal.get(Calendar.YEAR);
-											generatedIncidentList += 
-															"<center><div id=\"searchbox\" class='mbox'>\n" +
-															"	<div class=\"contentcontainer med left\" style=\"margin-left: 50px;\">";
-											if (rep.getIncidentType() == 0)
+											if(rep.isOpen())
 											{
-												// bullying
+												Date incidentDate = rep.getIncidentDate();
+												Calendar cal = Calendar.getInstance();
+												cal.setTime(incidentDate);
+												int month = cal.get(Calendar.MONTH) + 1;
+												int date = cal.get(Calendar.DAY_OF_MONTH);
+												int year = cal.get(Calendar.YEAR);
 												generatedIncidentList += 
-												"		<strong>Type: Bullying Incident</strong><br>\n" +
-												"		<strong>Subject: " + rep.getSubject() +"</strong><br>\n" +
-												"		<strong>School: " + rep.getSchool() +"</strong><br>\n" +
-												"		Incident Date: " + month + "/" + date + "/" + year;
-											}
-											else if (rep.getIncidentType() == 1)
-											{
-												// general incident
+																"<center><div id=\"searchbox\" class='mbox'>\n" +
+																"	<div class=\"contentcontainer med left\" style=\"margin-left: 50px;\">";
+												if (rep.getIncidentType() == 0)
+												{
+													// bullying
+													generatedIncidentList += 
+													"		<strong>Type: Bullying Incident</strong><br>\n" +
+													"		<strong>Subject: " + rep.getSubject() +"</strong><br>\n" +
+													"		<strong>School: " + rep.getSchool() +"</strong><br>\n" +
+													"		Incident Date: " + month + "/" + date + "/" + year;
+												}
+												else if (rep.getIncidentType() == 1)
+												{
+													// general incident
+													generatedIncidentList += 
+													"		<strong>Type: General Concern</strong><br>\n" +
+													"		<strong>Subject: " + rep.getSubject() +"</strong><br>\n" +
+													"		<strong>School: " + rep.getSchool() +"</strong><br>\n" +
+													"		Incident Date: " + month + "/" + date + "/" + year + "<br>";
+												}
 												generatedIncidentList += 
-												"		<strong>Type: General Concern</strong><br>\n" +
-												"		<strong>Subject: " + rep.getSubject() +"</strong><br>\n" +
-												"		<strong>School: " + rep.getSchool() +"</strong><br>\n" +
-												"		Incident Date: " + month + "/" + date + "/" + year + "<br>";
+													"		<br><a href=\"/view_ticket.html?id=" + i + "\" title=\"View the ticket\"><font color=\"FF00CC\">[ View the ticket here... ]</font></a>";
+												generatedIncidentList += 
+																"	</div>" + 
+																"</div></center>";
 											}
-											generatedIncidentList += 
-												"		<br><a href=\"/view_ticket.html?id=" + i + "\" title=\"View the ticket\"><font color=\"FF00CC\">[ View the ticket here... ]</font></a>";
-											generatedIncidentList += 
-															"	</div>" + 
-															"</div></center>";
 										}
 										s += "\r\n" + 
 												"<!DOCTYPE HTML>\n" + 

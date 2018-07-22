@@ -20,4 +20,17 @@ public class DataStore
 	{
 		return null;
 	}
+	
+	public static int getIncidentsOpen()
+	{
+		int furry = 0;
+		for(Report r : reportList)
+		{
+			if (r.isOpen())
+			{
+				furry++;
+			}
+		}
+		return furry;
+	}
 }
