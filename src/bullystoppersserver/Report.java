@@ -32,7 +32,8 @@ public class Report
 	private String reportingPersonEmail = "";
 	private String reportingPersonPhoneNumber = "";
 	
-	// we need an anonymous constructor and a non-anonymous constructor.
+	// details on ticket information.
+	private boolean isClosed = false;
 	
 	// constructor (for general incident)
 	public Report(String school, int incidentType, String subject, boolean anonymous, String reportingPersonName, String reportingPersonEmail, String reportingPersonPhoneNumber, String incidentDescription, Date incidentDate)
@@ -95,6 +96,11 @@ public class Report
 	public boolean injuryResulted()
 	{
 		return injuryResulted;
+	}
+	
+	public boolean absenceResulted()
+	{
+		return absenceResulted;
 	}
 	
 	public String getAdultsContacted()
@@ -161,4 +167,20 @@ public class Report
 	{
 		return reportingPersonPhoneNumber;
 	}
+	
+	public void closeReport()
+	{
+		isClosed = true;
+	}
+	
+	public void openReport()
+	{
+		isClosed = false;
+	}
+	
+	public boolean isOpen()
+	{
+		return !isClosed;
+	}
+	
 }

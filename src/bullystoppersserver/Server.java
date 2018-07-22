@@ -1347,7 +1347,7 @@ class ServerThread implements Runnable
 									String incidentDescription = URLDecoder.decode(ari[5].substring(ari[5].indexOf("=") + 1), "UTF-8");
 									String phone = URLDecoder.decode(ari[6].substring(ari[6].indexOf("=") + 1), "UTF-8");
 									String email = URLDecoder.decode(ari[7].substring(ari[7].indexOf("=") + 1), "UTF-8");
-									String name = URLDecoder.decode(ari[8].substring(ari[8].indexOf("=") + 1), "UTF-8");
+									String name = URLDecoder.decode(ari[8].substring(ari[8].indexOf("=") + 1, ari[8].indexOf("HTTP/1.1") - 1), "UTF-8");
 									boolean anonymous = false;
 									try
 									{
@@ -1642,7 +1642,7 @@ class ServerThread implements Runnable
 					}
 					else if (receiveMessage.contains("GET /view_ticket.html"))
 					{
-						Chocolat.println(receiveMessage);
+						// Chocolat.println(receiveMessage);
 						if (receiveMessage.indexOf("Cookie: ") == -1)
 						{
 							// present the login page.
@@ -1668,7 +1668,56 @@ class ServerThread implements Runnable
 									{
 										try
 										{
-											String idstr = receiveMessage.substring(receiveMessage.indexOf("?id=") + 4, receiveMessage.indexOf("HTTP"));
+											String idstr = receiveMessage.substring(receiveMessage.indexOf("=") + 1, receiveMessage.indexOf("HTTP/1.1") - 1);
+											int reportID = Integer.parseInt(idstr);
+											Report rep = DataStore.reportList.get(reportID);
+											Date incidentDate = rep.getIncidentDate();
+											Calendar cal = Calendar.getInstance();
+											cal.setTime(incidentDate);
+											int month = cal.get(Calendar.MONTH) + 1;
+											int date = cal.get(Calendar.DAY_OF_MONTH);
+											int year = cal.get(Calendar.YEAR);
+											String reportDescription = "";
+											if (rep.getIncidentType() == 0)
+											{
+												reportDescription += ("<strong>Subject:</strong> " + rep.getSubject() + "<br>\n");
+												reportDescription += ("<strong>Incident Type:</strong> Bullying<br>\n");
+												reportDescription += ("<strong>Date of Incident:</strong> " + month + "/" + date + "/" + year + "<br>\n");
+												reportDescription += ("<strong>School:</strong> " + rep.getSchool() + "<br>\n");
+												reportDescription += ("<strong>Description:</strong> " + rep.getIncidentDescription() + "<br>\n");
+												reportDescription += ("<strong>Injury Resulted (Y/N):</strong> " + (rep.injuryResulted() ? "Yes" : "No") + "<br>\n");
+												reportDescription += ("<strong>Absence Resulted (Y/N):</strong> " + (rep.absenceResulted() ? "Yes" : "No") + "<br>\n");
+												reportDescription += ("<strong>Adults Contacted:</strong> " + rep.getAdultsContacted() + "<br>\n");
+												reportDescription += ("<strong>Injuries Sustained:</strong> " + rep.getInjuriesSustained() + "<br>\n");
+												reportDescription += ("<strong>Method of knowledge:</strong> " + rep.getLearnedReason() + "<br>\n");
+												reportDescription += ("<strong>Reason for bullying:</strong> " + rep.getBullyingReason() + "<br>\n");
+												reportDescription += ("<strong>Students targeted:</strong> " + rep.getTargetedStudents() + "<br>\n");
+												reportDescription += ("<strong>Incident location: </strong> " + rep.getIncidentLocation() + "<br>\n");
+												reportDescription += ("<strong>Witness Names: </strong> " + rep.getWitnessNames() + "<br>\n");
+												reportDescription += ("<strong>Anonymous? (Y/N):</strong> " + (rep.isAnonymous() ? "Yes" : "No") + "<br>\n");
+												if (!rep.isAnonymous())
+												{
+													reportDescription += ("<strong>Reporter Name: </strong> " + rep.getReportingPersonName() + "<br>\n");
+													reportDescription += ("<strong>Reporter Email: </strong> " + rep.getReportingPersonEmail() + "<br>\n");
+													reportDescription += ("<strong>Reporter Phone: </strong> " + rep.getReportingPersonPhone() + "<br>\n");
+												}
+											}
+											else if (rep.getIncidentType() == 1)
+											{
+												reportDescription += ("<strong>Subject:</strong> " + rep.getSubject() + "<br>\n");
+												reportDescription += ("<strong>Incident Type:</strong> General Concern<br>\n");
+												reportDescription += ("<strong>Subject:</strong> " + rep.getSubject() + "<br>\n");
+												reportDescription += ("<strong>Date of Incident:</strong> " + month + "/" + date + "/" + year + "<br>\n");
+												reportDescription += ("<strong>School:</strong> " + rep.getSchool() + "<br>\n");
+												reportDescription += ("<strong>Description:</strong> " + rep.getIncidentDescription() + "<br>\n");
+												reportDescription += ("<strong>Anonymous? (Y/N):</strong> " + (rep.isAnonymous() ? "Yes" : "No") + "<br>\n");
+												if (!rep.isAnonymous())
+												{
+													reportDescription += ("<strong>Reporter Name: </strong> " + rep.getReportingPersonName() + "<br>\n");
+													reportDescription += ("<strong>Reporter Email: </strong> " + rep.getReportingPersonEmail() + "<br>\n");
+													reportDescription += ("<strong>Reporter Phone: </strong> " + rep.getReportingPersonPhone() + "<br>\n");
+												}
+											}
 											s += "\r\n" + 
 													"<!DOCTYPE HTML>\n" + 
 													"<html>\n" + 
@@ -1760,7 +1809,7 @@ class ServerThread implements Runnable
 													"</div>\n" + 
 													"<br>\n" +
 													"<center><div id=\"searchbox\" class='mbox'>\n" + 
-													// TODO: Insert text descriptors and "Close Ticket" Button here!
+													reportDescription +
 													"</div></center>" +
 													"<center><br />\n" + 
 													"<font size=\"1\">" +
