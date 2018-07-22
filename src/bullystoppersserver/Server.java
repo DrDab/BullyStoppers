@@ -1492,18 +1492,33 @@ class ServerThread implements Runnable
 										String generatedIncidentList = "";
 										for(Report rep : DataStore.reportList)
 										{
+											Date incidentDate = rep.getIncidentDate();
+											Calendar cal = Calendar.getInstance();
+											cal.setTime(incidentDate);
+											int month = cal.get(Calendar.MONTH) + 1;
+											int date = cal.get(Calendar.DAY_OF_MONTH);
+											int year = cal.get(Calendar.YEAR);
 											generatedIncidentList += 
 															"<center><div id=\"searchbox\" class='mbox'>\n" +
 															"	<div class=\"contentcontainer med left\" style=\"margin-left: 50px;\">";
 											if (rep.getIncidentType() == 0)
 											{
 												// bullying
-												
+												generatedIncidentList += 
+												"		<strong>Type: Bullying Incident</strong><br>\n" +
+												"		<strong>Subject: " + rep.getSubject() +"</strong><br>\n" +
+												"		<strong>School: " + rep.getSchool() +"</strong><br>\n" +
+												"		Incident Date: " + month + "/" + date + "/" + year;
+												// "		<strong>Subject: " + rep.getSubject() +"</strong><br>\n";
 											}
 											else if (rep.getIncidentType() == 1)
 											{
 												// general incident
-												
+												generatedIncidentList += 
+												"		<strong>Type: General Concern</strong><br>\n" +
+												"		<strong>Subject: " + rep.getSubject() +"</strong><br>\n" +
+												"		<strong>School: " + rep.getSchool() +"</strong><br>\n" +
+												"		Incident Date: " + month + "/" + date + "/" + year;
 											}
 											generatedIncidentList += 
 															"	</div>" + 
