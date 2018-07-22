@@ -1207,7 +1207,7 @@ class ServerThread implements Runnable
 									String incidentDescription = URLDecoder.decode(ari[15].substring(ari[15].indexOf("=") + 1), "UTF-8");
 									String incidentLocation = URLDecoder.decode(ari[16].substring(ari[16].indexOf("=") + 1), "UTF-8");
 									String incidentReason = URLDecoder.decode(ari[17].substring(ari[17].indexOf("=") + 1), "UTF-8");
-									String witnesses = URLDecoder.decode(ari[18].substring(ari[18].indexOf("=") + 1), "UTF-8");
+									String witnesses = "";
 									boolean anonymous = false;
 									try
 									{
@@ -1219,6 +1219,14 @@ class ServerThread implements Runnable
 									catch (ArrayIndexOutOfBoundsException arg1)
 									{
 										anonymous = false;
+									}
+									if (anonymous)
+									{
+										witnesses = URLDecoder.decode(ari[18].substring(ari[18].indexOf("=") + 1), "UTF-8");
+									}
+									else
+									{
+										witnesses = URLDecoder.decode(ari[18].substring(ari[18].indexOf("=", ari[18].indexOf("HTTP/1.1")) + 1), "UTF-8");
 									}
 									Calendar cal = Calendar.getInstance();
 									cal.set(Calendar.YEAR, Integer.parseInt(year));
@@ -1817,6 +1825,10 @@ class ServerThread implements Runnable
 													reportDescription +
 													"</div></center>" +
 													"<center><br />\n" + 
+													"<center><div id=\"searchbox\" class='mbox'>\n" + 
+													"	<a href=\"/close_ticket.html?id=" + reportID + "\" title=\"Close ticket\">[ Close this ticket ]</a>" +
+													"</div></center>" +
+													"<center><br />\n" + 
 													"<font size=\"1\">" +
 													"        Page generated in " +
 													(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
@@ -1824,6 +1836,137 @@ class ServerThread implements Runnable
 													"        Server Local Time: " +
 													DataStore.refDate.toString() +
 													"<br></font></center>" +
+													"</body>\n" + 
+													"</html>\n";
+										}
+										catch (Exception e)
+										{
+											send400(start);
+										}
+										
+									}
+									else
+									{
+										sendAccessDenied(start);
+									}
+								}
+								else
+								{
+									requestUserLogin(start);
+								}
+							}
+						}
+					}
+					else if (receiveMessage.contains("GET /close_ticket.html"))
+					{
+						// Chocolat.println(receiveMessage);
+						if (receiveMessage.indexOf("Cookie: ") == -1)
+						{
+							// present the login page.
+							requestUserLogin(start);
+						}
+						else
+						{
+							int p1 = receiveMessage.indexOf("user_authtokken=");
+							String token = "";
+							if (p1 == -1)
+							{
+								requestUserLogin(start);
+							}
+							else
+							{
+								token = receiveMessage.substring(p1 + 16, p1 + 16 + 36);
+								if (DataStore.authenticated.containsKey(token))
+								{
+									User tmpusr = DataStore.authenticated.get(token);
+									String username = tmpusr.getUsername();
+									int accountType = tmpusr.getAccountType();
+									if (accountType == 1 || accountType == 2)
+									{
+										try
+										{
+											String idstr = receiveMessage.substring(receiveMessage.indexOf("=") + 1, receiveMessage.indexOf("HTTP/1.1") - 1);
+											int reportID = Integer.parseInt(idstr);
+											Report rep = DataStore.reportList.get(reportID);
+											rep.closeReport();
+											s += "\r\n" +
+													"<!DOCTYPE HTML>\n" + 
+													"<html>\n" + 
+													"<head>\n" + 
+													"	<meta charset='utf-8'>\n" + 
+													"	<title>Report Closed</title> \n" + 
+													"    	<meta name=\"theme-color\" content=\"#00549e\">\n" + 
+													"	<link rel=\"top\" title=\"Report Closed\" href=\"/\">			\n" + 
+													"	<style type=\"text/css\">\n" + 
+													"		body,div,h1,h2,h3,h4,h5,h6,p,ul,li,dd,dt {\n" + 
+													"			font-family:verdana,sans-serif;\n" + 
+													"			color:white;\n" + 
+													"			margin:0;\n" + 
+													"			padding:0;\n" + 
+													"			background:none;\n" + 
+													"		}\n" + 
+													"\n" + 
+													"		body {\n" + 
+													"			background-attachment:fixed;\n" + 
+													"			background-position:50% 0%;\n" + 
+													"			background-repeat:no-repeat;\n" + 
+													"			background-color:#012e57;\n" + 
+													"		}\n" + 
+													"\n" + 
+													"		div#content2 {\n" + 
+													"			text-align: center;\n" + 
+													"			position:absolute;\n" + 
+													"			top:28em;\n" + 
+													"			left:0;\n" + 
+													"			right:0;\n" + 
+													"		}\n" + 
+													"\n" + 
+													"		.mbox {\n" + 
+													"			background-repeat:no-repeat;\n" + 
+													"			background-attachment:fixed;\n" + 
+													"			background-position:50% 0%;\n" + 
+													"			margin-left: auto;\n" + 
+													"			margin-right: auto;\n" + 
+													"			margin-top:10px;\n" + 
+													"			margin-bottom:10px;\n" + 
+													"			padding:2px 0px;\n" + 
+													"			width:480px;\n" + 
+													"			border-radius: 5px;\n" + 
+													"			box-shadow: 0px 0px 5px #000;\n" + 
+													"			text-shadow:0px 0px 2px black, 0px 0px 6px black;\n" + 
+													"		}\n" + 
+													"\n" + 
+													"		#searchbox { padding-bottom:5px; }\n" + 
+													"		#searchbox3 { font-size: 80%; }\n" + 
+													"		#searchbox4 { font-size: 60%; }\n" + 
+													"	</style>\n" + 
+													"</head>\n" + 
+													"<body>\n" + 
+													"<br>\n" + 
+													"<br>\n" + 
+													"<br>\n" + 
+													"<br>\n" + 
+													"<br>\n" + 
+													"<br>\n" + 
+													"<div id='searchbox3' class='mbox'>\n" + 
+													"	<center>\n" + 
+													"	<p>\n" + 
+													"	<strong>Report ticket closed successfully</strong><br><br>Thank you for using BullyStoppers. The ticket with ID " + reportID + " was closed.<br><br><a href=\"/index.html\" title=\"Homepage\">[ Back to home ]</a>" +
+													"	</p>\n" + 
+													"	</center>\n" + 
+													"</div>\n" + 
+													"<br><br>" +
+													"" +
+													"\n" + 
+													"</div>\n" + 
+													"<center><br />\n" + 
+													"<font size=\"1\">" +
+													"        Page generated in " +
+													(double)((st.getElapsedNanoTime() - start)/ 1000000000.0) +
+													" seconds [ 100% Java (BullyStoppers WebServer) ]       <br />\n" + 
+													"        Server Local Time: " +
+													DataStore.refDate.toString() +
+													"<br></font></center><br><br><br><br>" +
 													"</body>\n" + 
 													"</html>\n";
 										}
