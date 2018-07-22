@@ -25,16 +25,25 @@ public class IncidentDB
 	// the ID-map should be destroyed.
 	// IncidentDB should run in a while(true) loop, and repeatedly check if any of the queues
 	// are not empty.
-	 private static Queue<Report> toAdd = new LinkedList<Report>();
-	 private static Queue<Request> toGet = new LinkedList<Request>();
-	 private static Queue<Report> toClose = new LinkedList<Report>();
+	private Stopwatch st;
+	
+	private Queue<Report> toAdd = new LinkedList<Report>();
+	private Queue<Request> toGet = new LinkedList<Request>();
+	private Queue<Report> toClose = new LinkedList<Report>();
 	 
 	 // q.remove will remove the one last.
 	 
-	 private static Connection con;
+	 private Connection con;
 	 
-	 public static void initSQL(String filePath)
+	 
+	 public IncidentDB(Stopwatch st)
 	 {
+		 this.st = st;
+	 }
+	 
+	 public void initSQL(String filePath)
+	 {
+		 Chocolat.println("[" + st.elapsedTime() + "] Initializing SQLite connection with path " + filePath + ".");
 		 try 
 		 {
 			Class.forName("org.sqlite.JDBC");
@@ -46,17 +55,19 @@ public class IncidentDB
 		 
 		 try
 		 {
-			 con = DriverManager.getConnection("jdbc:sqlite:reports.db");
+			 con = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+			 Statement statement = con.createStatement();
 			 DatabaseMetaData dbm = con.getMetaData();
-			// check if "employee" table is there
 			 ResultSet tables = dbm.getTables(null, null, "incidents", null);
 			 if(tables.next())
 			 {
-				 
+				 Chocolat.println("[" + st.elapsedTime() + "] SQLite table incidents found successfully!");
 			 }
 			 else
 			 {
-				 
+				 Chocolat.println("[" + st.elapsedTime() + "] SQLite table incidents doesn't exist, creating new table of incidents.");
+				 statement.executeUpdate("drop table incidents");
+				 statement.executeUpdate("create table incidents (subject text, type int, anonymous int, month int, day int, year int, description text, school text, injurybool int, absencebool int, adultscontacted text, injuriessustained text, learnmethod text, bullyingreason text, targetedstudents text, bullynames text, incidentlocation text, witnessnames text, name text, email text, phone text)");
 			 }
 		 }
 		 catch (SQLException e)
@@ -66,7 +77,7 @@ public class IncidentDB
 		 
 	 }
 	 
-	 public static void run()
+	 public void run()
 	 {
 		 for(;;)
 		 {
@@ -85,7 +96,7 @@ public class IncidentDB
 		 }
 	 }
 	 
-	 public static void addReport(Report report)
+	 public void addReport(Report report)
 	 {
 		toAdd.add(report);
 	 }
